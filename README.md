@@ -5,7 +5,8 @@ Django-based website powering daily coding challenges.
 
 Roadmap
 -------
-* [ ] Allow people to log in using OAuth2 ([python-oauth2][1]?)
+* [ ] ~~Allow people to log in using OAuth2~~
+    * Decided not to use OAuth.
 
 * [ ] Creating challenges:
     * [ ] Specify challenge name, duration, rules
@@ -22,6 +23,3 @@ Roadmap
 	* [ ] Vote for challenges
 	* [ ] Create challenges
 	* [ ] Judge challenge results
-
-
-  [1]: https://github.com/simplegeo/python-oauth2

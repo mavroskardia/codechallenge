@@ -5,7 +5,7 @@ admin.autodiscover()
 
 import main.views
 import main.urls
-import ccauth.urls
+
 
 urlpatterns = patterns('',
     # Examples:
@@ -14,6 +14,6 @@ urlpatterns = patterns('',
 
     url(r'^$', main.views.home, name='home'),
     url(r'^main/', include(main.urls)),
-    url(r'^ccauth/', include(ccauth.urls)),
     url(r'^admin/', include(admin.site.urls)),
+    url('', include('social_auth.urls')),
 )
