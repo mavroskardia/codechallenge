@@ -3,7 +3,7 @@ Code Challenge
 
 Django-based website powering daily coding challenges.
 
-Getting the Project
+Getting Started
 ---------------
 ```
 # grab the project from github
@@ -32,6 +32,9 @@ cd cc
 
 # migrate tables set up for migration
 ./manage.py migrate
+
+# make sure everything is working by starting up the development server
+./manage.py runserver
 ```
 
 Roadmap
