@@ -89,5 +89,7 @@ STATICFILES_FINDERS = (
     'django.contrib.staticfiles.finders.AppDirectoriesFinder',
 )
 
-from local_settings import *
-
+try:
+    from local_settings import *
+except:
+    pass
