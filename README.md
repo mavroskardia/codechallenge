@@ -9,7 +9,7 @@ Getting Started
 # grab the project from github
 git clone https://github.com/mavroskardia/codechallenge.git
 
-# make a reference to the cloned repo for use later in the script
+# change to the new codechallenge directory
 cd codechallenge
 
 # make a virtual environment
