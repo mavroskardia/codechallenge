@@ -36,7 +36,9 @@ INSTALLED_APPS = (
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'south',
-    'main'
+    'apps.landing',
+    'apps.challenge',
+    'apps.coder',
 )
 
 MIDDLEWARE_CLASSES = (
@@ -88,6 +90,4 @@ STATICFILES_FINDERS = (
 )
 
 from local_settings import *
-
-
 
