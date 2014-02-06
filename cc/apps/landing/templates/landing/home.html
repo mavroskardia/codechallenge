@@ -3,4 +3,14 @@
 {% block contents %}
 	<h2>Welcome</h2>
 	<p>This is the introductory paragraph about Code Challenge.</p>
+
+	<p>You're not logged in. This is what you can do:</p>
+
+	<ul>
+		<li><a href="{% url 'login' %}">Log in</a></li>
+		<li><a href="#">Sign up</a></li>
+		<li><a href="#">View Challenges</a></li>
+		<li><a href="#">View Coders</a></li>
+	</ul>
+
 {% endblock %}
