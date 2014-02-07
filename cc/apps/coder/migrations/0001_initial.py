@@ -16,7 +16,7 @@ class Migration(SchemaMigration):
             ('tagline', self.gf('django.db.models.fields.CharField')(max_length=1024, blank=True)),
             ('about', self.gf('django.db.models.fields.TextField')(blank=True)),
             ('xp', self.gf('django.db.models.fields.BigIntegerField')(default=0)),
-            ('level', self.gf('django.db.models.fields.related.ForeignKey')(to=orm['coder.Level'])),
+            ('level', self.gf('django.db.models.fields.related.ForeignKey')(to=orm['coder.Level'], null=True)),
         ))
         db.send_create_signal(u'coder', ['Coder'])
 
@@ -93,7 +93,7 @@ class Migration(SchemaMigration):
             'about': ('django.db.models.fields.TextField', [], {'blank': 'True'}),
             'challenges': ('django.db.models.fields.related.ManyToManyField', [], {'to': u"orm['challenge.Challenge']", 'symmetrical': 'False'}),
             u'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
-            'level': ('django.db.models.fields.related.ForeignKey', [], {'to': u"orm['coder.Level']"}),
+            'level': ('django.db.models.fields.related.ForeignKey', [], {'to': u"orm['coder.Level']", 'null': 'True'}),
             'name': ('django.db.models.fields.CharField', [], {'max_length': '256', 'blank': 'True'}),
             'tagline': ('django.db.models.fields.CharField', [], {'max_length': '1024', 'blank': 'True'}),
             'user': ('django.db.models.fields.related.OneToOneField', [], {'to': u"orm['auth.User']", 'unique': 'True'}),
