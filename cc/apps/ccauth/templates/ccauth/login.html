@@ -1,7 +1,7 @@
 {% extends 'base.html' %}
 
 {% block contents %}
-	<p>Don't have a login yet? <a href="{% url 'auth:login' %}">Register!</a></p>
+	<p>Don't have a login yet? <a href="{% url 'auth:register' %}">Register!</a></p>
 
 	{% if form.errors %}
 	<p>Invalid username or password</p>
