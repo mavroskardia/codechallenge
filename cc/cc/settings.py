@@ -39,6 +39,7 @@ INSTALLED_APPS = (
     'apps.landing',
     'apps.challenge',
     'apps.coder',
+    'apps.ccauth'
 )
 
 MIDDLEWARE_CLASSES = (

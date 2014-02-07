@@ -1,20 +1,38 @@
 <!doctype html>
 <html lang="en">
 <head>
-	<meta charset="UTF-8">
-	<title>Code Challenge (final name pending)</title>
+    <meta charset="UTF-8">
+    <title>Code Challenge (final name pending)</title>
 </head>
 <body>
-	<header>
-		<h1>Code Challenge</h1>
-	</header>
-	<div id="contents">
-	{% block contents %}
-	{% endblock %}
-	</div>
-	<footer>
-	</footer>
-	{% block extrascripts %}
-	{% endblock %}
+    <header>
+        <h1><a href="{% url 'home' %}">Code Challenge</a></h1>
+        <ul id="useractions">
+            {% if user.is_authenticated %}
+            <li><a href="{% url 'auth:logout' %}">Logout</a></li>
+            {% else %}
+            <li><a href="{% url 'auth:login' %}">Login</a></li>
+            {% endif %}
+        </ul>
+    </header>
+    <div id="contents">
+        {% if messages %}
+            <ul class="messages list-unstyled nav nav-pills">
+            {% for message in messages %}
+                <li class="col-xs-12 alert alert-dismissable {% if message.tags %}alert-{{message.tags}}{% endif %}">
+                    <span class="pull-left">{{message}}</span>
+                    <button class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
+                </li>
+            {% endfor %}
+            </ul>
+        {% endif %}
+
+    {% block contents %}
+    {% endblock %}
+    </div>
+    <footer>
+    </footer>
+    {% block extrascripts %}
+    {% endblock %}
 </body>
 </html>
