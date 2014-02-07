@@ -1,6 +1,17 @@
-{% extends 'base.html' %}
+{% extends 'coder/base_profile.html' %}
 
-{% block contents %}
-	<h2>{{coder.user.username}} (editable)</h2>
-
+{% block rw %}
+	<form action="{% url 'coder:profile' coder.user.username %}" method="post" class="col-12 col-lg-5 text-left">
+		{% csrf_token %}
+		{% for field in form %}
+			<div class="form-group">
+	            {{ field.label }}
+				{{ field }}
+	            {{ field.errors }}
+			</div>
+		{% endfor %}
+		<div class="form-group">
+			<button type="submit" class="btn btn-primary btn-lg">Update Profile</button>
+		</div>
+	</form>
 {% endblock %}
