@@ -29,6 +29,16 @@ class ProfileView(View):
         form = self.form_class(request.POST)
 
         if form.is_valid():
+            name = form.cleaned_data.get('name')
+            tagline = form.cleaned_data.get('tagline')
+            about = form.cleaned_data.get('about')
+
+            if name: coder.name = name
+            if tagline: coder.tagline = tagline
+            if about: coder.about = about
+
+            coder.save()
+
             messages.info(request, 'Successfully updated profile')
 
         return render(request, self.rw_template_name, { 'coder': coder, 'form': form })

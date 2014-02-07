@@ -7,9 +7,24 @@ class Coder(models.Model):
 	tagline = models.CharField(max_length=1024, blank=True)
 	about = models.TextField(blank=True)
 	xp = models.BigIntegerField(default=0)
-	level = models.ForeignKey('Level', null=True)
-	challenges = models.ManyToManyField('challenge.Challenge')
+	challenges = models.ManyToManyField('challenge.Challenge', blank=True, null=True)
+
+	def level(self):
+		return Level.objects.filter(starting_xp__lte=self.xp).order_by('-starting_xp').first()
+
+	def __str__(self):
+		return self.__unicode__()
+
+	def __unicode__(self):
+		return '{self.name} ({self.xp})'.format(self=self)
 
 class Level(models.Model):
 	name = models.CharField(max_length=256)
 	starting_xp = models.BigIntegerField()
+
+	def __str__(self):
+		return self.__unicode__()
+
+	def __unicode__(self):
+		return '{self.name} ({self.starting_xp})'.format(self=self)
+

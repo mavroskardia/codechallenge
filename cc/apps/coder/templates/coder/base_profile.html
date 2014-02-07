@@ -4,6 +4,24 @@
 
 	<h2>Profile for {{ coder.user.username }}</h2>
 
+	<ul>
+		<li>
+			Name: {{ coder.name }}
+		</li>
+		<li>
+			Tagline: {{ coder.tagline }}
+		</li>
+		<li>
+			About: {{ coder.about }}
+		</li>
+		<li>
+			Level: {{ coder.level.name }} ({{ coder.xp }})
+		</li>
+		<li>
+			Challenges:
+		</li>
+	</ul>
+
 	{% block rw %}
 	{% endblock %}
 
