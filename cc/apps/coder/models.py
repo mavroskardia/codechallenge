@@ -7,7 +7,7 @@ class Coder(models.Model):
 	about = models.TextField()
 	xp = models.BigIntegerField()
 	level = models.ForeignKey('Level')
-	#challenges = models.ManyToManyField('challenge.Challenge')
+	challenges = models.ManyToManyField('challenge.Challenge')
 
 class Level(models.Model):
 	name = models.CharField(max_length=256)
