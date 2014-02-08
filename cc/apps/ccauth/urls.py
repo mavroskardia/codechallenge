@@ -1,6 +1,7 @@
 from django.conf.urls import patterns, include, url
 
-from apps.ccauth.views.login import LoginView, LogoutView
+from apps.ccauth.views.login import LoginView
+from apps.ccauth.views.logout import LogoutView
 from apps.ccauth.views.register import RegisterView
 
 

@@ -32,8 +32,3 @@ class LoginView(View):
                 messages.error(request, 'Invalid username or password')
 
         return render(request, self.template_name, { 'form': form })
-
-class LogoutView(View):
-    def get(self, request, *args, **kwargs):
-        auth.logout(request)
-        return HttpResponseRedirect(reverse('home'))
