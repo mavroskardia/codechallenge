@@ -1,8 +1,18 @@
+{% load staticfiles %}
+{% load compress %}
 <!doctype html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <title>Code Challenge (final name pending)</title>
+    {% if debug %}
+        <link rel="stylesheet/less" type="text/css" media="all" href="{% static 'less/style.less' %}" />
+        <script src="{% static 'js/less-1.6.2.min.js' %}"></script>
+    {% else %}
+        {% compress css %}
+        <link rel="stylesheet" type="text/less" media="all" href="{% static 'less/style.less' %}" />
+        {% endcompress %}
+    {% endif %}
 </head>
 <body>
     <header>

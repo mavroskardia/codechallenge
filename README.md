@@ -25,6 +25,7 @@ pip install -r requirements.txt
 cd cc
 ./manage.py schemamigration --init landing
 ./manage.py schemamigration --init coder
+./manage.py schemamigration --init ccauth
 ./manage.py schemamigration --init challenge
 
 # setup database
