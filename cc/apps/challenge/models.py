@@ -7,3 +7,7 @@ class Challenge(models.Model):
 	duration = models.IntegerField(verbose_name="Duration (days)")
 	start = models.DateField()
 	end = models.DateField()
+
+class Rule(models.Model):
+	description = models.TextField()
+	challenge = models.ForeignKey('challenge.Challenge')

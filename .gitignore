@@ -1,5 +1,6 @@
+static
+ve
 db.sqlite3
-ve/
 *.log
 *.pot
 *.pyc
