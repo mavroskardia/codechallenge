@@ -3,6 +3,7 @@ from django.shortcuts import render
 from django.views.generic.base import View
 from django.views.generic import TemplateView
 from django.contrib import auth
+from django.contrib.auth import login, logout, authenticate
 from django.contrib.auth.models import User
 from django.contrib import messages
 from django.core.urlresolvers import reverse
@@ -31,6 +32,10 @@ class RegisterView(View):
             coder = Coder()
             coder.user = user
             coder.save()
+
+            logout(request)
+            user = authenticate(username=username, password=password)
+            login(request, user)
 
             messages.info(request, 'Successfully registered as a coder!')
 
