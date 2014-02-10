@@ -1,0 +1,11 @@
+{% extends 'base.html' %}
+
+{% block contents %}
+
+{% for challenge in challenge_list %}
+
+	{{ challenge.name }}
+
+{% endfor %}
+
+{% endblock %}
