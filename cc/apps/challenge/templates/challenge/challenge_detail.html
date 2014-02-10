@@ -1,0 +1,15 @@
+{% extends 'base.html' %}
+
+{% block contents %}
+
+	{{ object }}
+
+	<h3>Rules</h3>
+
+	<ul>
+	{% for rule in object.rule_set.all %}
+		<li>{{rule}}</li>
+	{% endfor %}
+	</ul>
+
+{% endblock %}
