@@ -20,6 +20,8 @@ source ve/bin/activate
 
 # install the prerequisites
 pip install -r requirements.txt
+sudo pacman -S lessc
+# or: apt-get install node-less
 
 # setup migrations
 cd cc
