@@ -1,4 +1,5 @@
 ve
+db.sqlite3
 *.log
 *.pot
 *.pyc

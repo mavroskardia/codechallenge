@@ -1,0 +1,24 @@
+{% extends 'base.html' %}
+
+{% block contents %}
+	<p>Don't have a login yet? <a href="{% url 'auth:register' %}">Register!</a></p>
+
+	{% if form.errors %}
+	<p>Invalid username or password</p>
+	{% endif %}
+
+	<form action="{% url 'auth:login' %}" method="post" class="col-12 col-lg-5 text-left">
+		{% csrf_token %}
+		{% for field in form %}
+			<div class="form-group">
+	            {{ field.label }}
+				{{ field }}
+	            {{ field.errors }}
+			</div>
+		{% endfor %}
+		<div class="form-group">
+			<button type="submit" class="btn btn-primary btn-lg">Login</button>
+		</div>
+	</form>
+
+{% endblock %}
