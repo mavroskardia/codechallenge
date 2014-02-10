@@ -16,7 +16,8 @@ class Coder(models.Model):
 		return self.__unicode__()
 
 	def __unicode__(self):
-		return '{self.name} ({self.xp})'.format(self=self)
+		name = self.name or self.user.username
+		return '{name} ({self.xp})'.format(name=name, self=self)
 
 class Level(models.Model):
 	name = models.CharField(max_length=256)

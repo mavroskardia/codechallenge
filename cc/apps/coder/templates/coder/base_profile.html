@@ -1,26 +1,36 @@
 {% extends 'base.html' %}
 
 {% block contents %}
+	<div class="profile">
+		<h2>Profile for {{ coder.user.username }}</h2>
 
-	<h2>Profile for {{ coder.user.username }}</h2>
-
-	<ul>
-		<li>
-			Name: {{ coder.name }}
-		</li>
-		<li>
-			Tagline: {{ coder.tagline }}
-		</li>
-		<li>
-			About: {{ coder.about }}
-		</li>
-		<li>
-			Level: {{ coder.level.name }} ({{ coder.xp }})
-		</li>
-		<li>
-			Challenges:
-		</li>
-	</ul>
+		<ul class="list-unstyled">
+			<li>
+				<span class="key">Name</span>
+				<span class="value">{{ coder.name }}</span>
+			</li>
+			<li>
+				<span class="key">Tagline</span>
+				<span class="value">{{ coder.tagline }}</span>
+			</li>
+			<li>
+				<span class="key">Level</span>
+				<span class="value">{{ coder.level }}</span>
+			</li>
+			<li>
+				<span class="key">About</span>
+				<span class="value">{{ coder.about }}</span>
+			</li>
+			<li>
+				<span class="key">Challenges</span>
+				<ul>
+				{% for challenge in coder.challenges.all %}
+					<li><a href="{% url 'challenge:detail' challenge.id %}">{{ challenge }}</a></li>
+				{% endfor %}
+				</ul>
+			</li>
+		</ul>
+	</div>
 
 	{% block rw %}
 	{% endblock %}
