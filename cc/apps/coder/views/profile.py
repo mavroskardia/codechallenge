@@ -19,26 +19,17 @@ class ProfileView(View):
         coder = get_object_or_404(Coder, user__username=username)
 
         if request.user == coder.user:
-            return render(request, self.rw_template_name, { 'coder': coder, 'form': self.form_class() })
+            return render(request, self.rw_template_name, { 'coder': coder, 'form': self.form_class(instance=coder) })
 
         return render(request, self.ro_template_name, { 'coder': coder })
 
     def post(self, request, username, *args, **kwargs):
         coder = get_object_or_404(Coder, user__username=username)
 
-        form = self.form_class(request.POST)
+        form = self.form_class(request.POST, instance=coder)
 
         if form.is_valid():
-            name = form.cleaned_data.get('name')
-            tagline = form.cleaned_data.get('tagline')
-            about = form.cleaned_data.get('about')
-
-            if name: coder.name = name
-            if tagline: coder.tagline = tagline
-            if about: coder.about = about
-
-            coder.save()
-
+            form.save()
             messages.info(request, 'Successfully updated profile')
 
         return render(request, self.rw_template_name, { 'coder': coder, 'form': form })
