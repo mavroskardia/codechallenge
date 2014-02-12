@@ -15,7 +15,8 @@ class LoginView(View):
 
     def get(self, request, *args, **kwargs):
         form = self.form_class()
-        return render(request, self.template_name, { 'form': form })
+        next = request.GET.get('next') or '/'
+        return render(request, self.template_name, { 'form': form, 'next': next })
 
     def post(self, request, *args, **kwargs):
         form = self.form_class(request.POST)
@@ -25,6 +26,10 @@ class LoginView(View):
             if user is not None:
                 if user.is_active:
                     auth.login(request, user)
+                    
+                    if 'next' in request.POST:
+                        return HttpResponseRedirect(request.POST['next'])
+
                     return HttpResponseRedirect(reverse('home'))
                 else:
                     messages.error(request, 'Not an active user')
