@@ -6,9 +6,9 @@
     <meta charset="UTF-8">
     <title>Code Challenge (final name pending)</title>
     {% if debug %}
-        <link rel="stylesheet/less" type="text/less" media="all" href="{% static 'less/bootstrap/bootstrap.less' %}" />
+        <link rel="stylesheet/less" type="text/less" media="all" href="{% static 'bootstrap/less/bootstrap.less' %}" />
         <link rel="stylesheet/less" type="text/less" media="all" href="{% static 'less/style.less' %}" />
-        <script src="{% static 'js/less-1.6.2.min.js' %}"></script>
+        <script src="{% static 'less/dist/less-1.7.0.min.js' %}"></script>
     {% else %}
         {% compress css %}
         <link rel="stylesheet/less" type="text/less" media="all" href="{% static 'less/bootstrap/bootstrap.less' %}" />
@@ -45,6 +45,10 @@
     </div>
     <footer>
     </footer>
+
+    <script src="{% static 'jquery/dist/jquery.js' %}"></script>
+    <script src="{% static 'boostrap/dist/js/bootstrap.js' %}"></script>
+
     {% block extrascripts %}
     {% endblock %}
 </body>

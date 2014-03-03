@@ -38,6 +38,7 @@ INSTALLED_APPS = (
     'django.contrib.staticfiles',
     'south',
     'compressor',
+    'djangobower',
     'apps.landing',
     'apps.challenge',
     'apps.coder',
@@ -94,10 +95,22 @@ STATICFILES_FINDERS = (
     'django.contrib.staticfiles.finders.AppDirectoriesFinder',
     #'django.contrib.staticfiles.finders.DefaultStorageFinder',
     'compressor.finders.CompressorFinder',
+    'djangobower.finders.BowerFinder',
 )
+
+BOWER_COMPONENTS_ROOT = BASE_DIR
+
+BOWER_PATH = '/usr/bin/bower'
 
 COMPRESS_PRECOMPILERS = (
     ('text/less', 'lessc {infile} {outfile}'),
+)
+
+BOWER_INSTALLED_APPS = (
+    'jquery',
+    'less',
+    'bootstrap',
+    'fontawesome',
 )
 
 try:
