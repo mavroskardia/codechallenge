@@ -8,8 +8,9 @@ from django.core.urlresolvers import reverse
 from django.contrib.auth.decorators import login_required
 from django.utils.decorators import method_decorator
 
+from .models import Rule
 from .models import Challenge
-from .forms import ChallengeForm
+from .forms import ChallengeForm, AddRuleFormset
 
 
 class IndexView(generic.ListView):
@@ -25,21 +26,28 @@ class CreateView(View):
     @method_decorator(login_required)
     def get(self, request, *args, **kwargs):
         form = self.form_class()
-        return render(request, self.template_name, { 'form': form })
+        rule_formset = AddRuleFormset(instance=Challenge())
+
+        return render(request, self.template_name, { 'form': form, 'rule_formset': rule_formset })
 
     @method_decorator(login_required)
     def post(self, request, *args, **kwargs):
         form = self.form_class(request.POST)
+        rule_formset = AddRuleFormset(request.POST)
 
         if form.is_valid():
-            form.save()
-            messages.info(request, 'Challenge created!')
-            return HttpResponseRedirect(reverse('challenge:index'))
+            challenge = form.save()
 
-        return render(request, self.template_name, { 'form': form })
+            rule_formset = AddRuleFormset(request.POST, instance=challenge)
+            if rule_formset.is_valid():
+                rule_formset.save()
+
+                messages.info(request, 'Challenge created!')
+                return HttpResponseRedirect(reverse('challenge:index'))
+
+        return render(request, self.template_name, { 'form': form, 'rule_formset': rule_formset })
 
 class JoinView(View):
-
     @method_decorator(login_required)
     def get(self, request, pk, *args, **kwargs):
         challenge = get_object_or_404(Challenge, pk=pk)
