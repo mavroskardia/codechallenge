@@ -51,6 +51,11 @@ class JoinView(View):
     @method_decorator(login_required)
     def get(self, request, pk, *args, **kwargs):
         challenge = get_object_or_404(Challenge, pk=pk)
+        if challenge.coder_set.filter(pk=request.user.coder.id).exists():
+            messages.error(request, 'Trying to join a challenge you are already participating in. Contacting the NSA and FBI and CIA.')
+        else:
+            challenge.coder_set.add(request.user.coder)
+            challenge.save()
+            messages.info(request, 'Joined Challenge!')
 
-        messages.info(request, 'Joining Challenge %s' % pk)
         return HttpResponseRedirect(reverse('challenge:detail', args=(pk,)))
