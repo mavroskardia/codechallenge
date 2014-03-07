@@ -4,7 +4,7 @@
 
 	{{ object }}
 
-	{% if user.is_authenticated %}
+	{% if user.is_authenticated and not already_joined %}
 	<a class="btn btn-primary btn-lg" href="{% url 'challenge:join' object.id %}">Join this challenge</a>
 	{% endif %}
 

@@ -13,10 +13,15 @@ from .forms import ChallengeForm
 
 
 class IndexView(generic.ListView):
-	model = Challenge
+    model = Challenge
 
 class DetailView(generic.DetailView):
-	model = Challenge
+    model = Challenge
+
+    def get_context_data(self, **kwargs):
+        context = super(DetailView, self).get_context_data(**kwargs)
+        context['already_joined'] = Challenge.objects.filter(coder__user__id=self.request.user.id).exists()
+        return context
 
 class CreateView(View):
     form_class = ChallengeForm
