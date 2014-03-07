@@ -11,9 +11,19 @@
 			{{ field.errors }}
 		</div>
 	{% endfor %}
+	{{ rule_formset.as_p }}
+	<div>
+		<button type="button" id="js-addrule">Add Rule</button>
+		<ul id="js-rules">
+		</ul>
+	</div>
 	<div class="form-group">
 		<button type="submit" class="btn btn-primary btn-lg">Create</button>
 	</div>
 </form>
+
+<script type="text/javascript">
+
+</script>
 
 {% endblock %}
