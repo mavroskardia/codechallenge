@@ -3,7 +3,7 @@
 {% block contents %}
 
 {% if user.is_authenticated %}
-	<a href="{% url 'challenge:create' %}">Create Challenge</a>
+	<a class="btn btn-primary" href="{% url 'challenge:create' %}">Create Challenge</a>
 {% endif %}
 
 <ul>
