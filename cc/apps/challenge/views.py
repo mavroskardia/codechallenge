@@ -1,5 +1,5 @@
 from django.http import HttpResponse
-from django.shortcuts import render
+from django.shortcuts import render, get_object_or_404
 from django.views import generic
 from django.views.generic.base import View
 from django.contrib import messages
@@ -37,3 +37,12 @@ class CreateView(View):
             return HttpResponseRedirect(reverse('challenge:index'))
 
         return render(request, self.template_name, { 'form': form })
+
+class JoinView(View):
+
+    @method_decorator(login_required)
+    def get(self, request, pk, *args, **kwargs):
+        challenge = get_object_or_404(Challenge, pk=pk)
+
+        messages.info(request, 'Joining Challenge %s' % pk)
+        return HttpResponseRedirect(reverse('challenge:detail', args=(pk,)))

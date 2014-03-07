@@ -82,13 +82,13 @@ USE_L10N = True
 
 USE_TZ = True
 
+LOGIN_URL = '/ccauth/login'
 
 MEDIA_URL = '/media/'
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 
 STATIC_URL = '/static/'
 STATIC_ROOT = os.path.join(BASE_DIR, 'static')
-LOGIN_URL = '/ccauth/login'
 
 STATICFILES_FINDERS = (
     'django.contrib.staticfiles.finders.FileSystemFinder',
