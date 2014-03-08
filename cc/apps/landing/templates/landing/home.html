@@ -2,16 +2,18 @@
 
 {% block contents %}
 	<h2>Welcome</h2>
+
 	<p>This is the introductory paragraph about Code Challenge.</p>
 
-
+	{% if not user.is_authenticated %}
 	<p>You're not logged in. This is what you can do:</p>
+	{% else %}
+	<p>Welcome back, {{ user.coder.name }}.</p>
+	{% endif %}
 
 	<ul>
-		<li><a href="{% url 'auth:login' %}">Log in</a></li>
-		<li><a href="{% url 'auth:register' %}">Sign up</a></li>
-		<li><a href="{% url 'challenge:index' %}">View Challenges</a></li>
-		<li><a href="#">View Coders</a></li>
+		<li><a href="{% url 'challenge:index' %}">Challenges</a></li>
+		<li><a href="#">Coders</a></li>
 	</ul>
 
 {% endblock %}

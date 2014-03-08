@@ -4,7 +4,10 @@
 	<p>Don't have a login yet? <a href="{% url 'auth:register' %}">Register!</a></p>
 
 	{% if form.errors %}
-	<p>Invalid username or password</p>
+	<div class="alert alert-danger alert-dismissble">
+		<button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
+		<span>Invalid username or password.</span>
+	</div>
 	{% endif %}
 
 	<form action="{% url 'auth:login' %}" method="post" class="col-12 col-lg-5 text-left">
