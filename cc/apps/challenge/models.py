@@ -13,7 +13,7 @@ class Challenge(models.Model):
 
 class Rule(models.Model):
 	description = models.TextField()
-	challenge = models.ForeignKey('challenge.Challenge')
+	challenge = models.ForeignKey(Challenge)
 
 	def __unicode__(self):
 		return self.description[0:20]
