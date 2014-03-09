@@ -64,3 +64,17 @@ class JoinView(View):
             messages.info(request, 'Joined Challenge!')
 
         return HttpResponseRedirect(reverse('challenge:detail', args=(pk,)))
+
+
+class LeaveView(View):
+    @method_decorator(login_required)
+    def get(self, request, pk, *args, **kwargs):
+        challenge = get_object_or_404(Challenge, pk=pk)
+        if challenge.coder_set.filter(pk=request.user.coder.id).exists():
+            challenge.coder_set.remove(request.user.coder)
+            challenge.save()
+            messages.info(request, 'Left challenge.  Quitters never win.')
+        else:
+            messages.error(request, 'You had never joined this challenge.')
+
+        return HttpResponseRedirect(reverse('challenge:detail', args=(pk,)))

@@ -8,6 +8,10 @@
 	<a class="btn btn-primary btn-lg" href="{% url 'challenge:join' object.id %}">Join this challenge</a>
 	{% endif %}
 
+	{% if user.is_authenticated and already_joined %}
+	<a class="btn btn-primary btn-lg" href="{% url 'challenge:leave' object.id %}">Leave this challenge</a>
+	{% endif %}
+
 	{% if object.coder_set.count > 0 %}
 	<h3>Coders on this challenge</h3>
 	<ul>
