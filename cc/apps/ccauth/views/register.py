@@ -37,8 +37,8 @@ class RegisterView(View):
             user = authenticate(username=username, password=password)
             login(request, user)
 
-            messages.info(request, 'Successfully registered as a coder!')
+            messages.info(request, 'Successfully registered as a coder! Please take a moment to fill out your profile.')
 
-            return HttpResponseRedirect(reverse('home'))
+            return HttpResponseRedirect(reverse('coder:profile', args=(user.username,)))
 
         return render(request, self.template_name, { 'form': form })

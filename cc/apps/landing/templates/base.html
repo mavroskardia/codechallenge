@@ -15,17 +15,23 @@
     {% endif %}
 </head>
 <body>
-    <header>
+    <header id="header">
         <h1><a href="{% url 'home' %}">Code Challenge</a></h1>
-        <ul id="useractions" class="nav nav-pills navbar-right">
+        <nav class="navbar navbar-default">
+            <ul class="nav navbar-nav">
+                <li><a href="{% url 'challenge:index' %}">Challenges</a></li>
+                <li><a href="{% url 'coder:index' %}">Coders</a></li>
+            </ul>
+            <ul class="nav navbar-nav navbar-right">
             {% if user.is_authenticated %}
-            <li><a href="{% url 'coder:profile' user.username %}">{{ user.username }}</a></li>
-            <li><a href="{% url 'auth:logout' %}">Logout</a></li>
+                <li><a href="{% url 'coder:profile' user.username %}">{{ user.username }}</a></li>
+                <li><a href="{% url 'auth:logout' %}">Logout</a></li>
             {% else %}
-            <li><a href="{% url 'auth:login' %}">Login</a></li>
-            <li><a href="{% url 'auth:register' %}">Sign up</a></li>
+                <li><a href="{% url 'auth:login' %}">Login</a></li>
+                <li><a href="{% url 'auth:register' %}">Sign up</a></li>
             {% endif %}
-        </ul>
+            </ul>
+        </nav>
     </header>
     <div id="contents">
         {% if messages %}
