@@ -2,16 +2,20 @@
 
 {% block contents %}
 
-{% if user.is_authenticated %}
-	<a class="btn btn-primary" href="{% url 'challenge:create' %}">Create Challenge</a>
-{% endif %}
+	<header>
+		<h1>Challenges</h1>
+		{% if user.is_authenticated %}
+		<a class="btn btn-primary" href="{% url 'challenge:create' %}">Create Challenge</a>
+		{% endif %}
+	</header>
 
-<ul>
-{% for challenge in challenge_list %}
-	<li>
-		<a href="{% url 'challenge:detail' challenge.id %}">{{ challenge.name }}</a>
-	</li>
-{% endfor %}
-</ul>
+	<ul class="list-unstyled">
+	{% for challenge in challenge_list %}
+		<li>
+			<a href="{% url 'challenge:detail' challenge.id %}">{{ challenge.name }}</a>
+			<span class="badge badge-info">{{ challenge.coder_set.count }} participating</span>
+		</li>
+	{% endfor %}
+	</ul>
 
 {% endblock %}
