@@ -9,4 +9,5 @@ urlpatterns = patterns('',
 	url(r'^(?P<pk>\d+)/join$', views.JoinView.as_view(), name='join'),
 	url(r'^(?P<pk>\d+)/leave$', views.LeaveView.as_view(), name='leave'),
 	url(r'^create/$', views.CreateView.as_view(), name='create'),
+	url(r'^add_rule_template/(?P<rule_count>\d+)$', views.AddRuleTemplate.as_view(), name='add_rule_template'),
 )
