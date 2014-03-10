@@ -12,6 +12,7 @@ AddRuleTemplateFormset = inlineformset_factory(Challenge, Rule, can_delete=False
 class ChallengeForm(ModelForm):
 	class Meta:
 		model = Challenge
+		fields = ('name', 'duration',)
 
 	name = forms.CharField(
 		required=True,
@@ -32,3 +33,5 @@ class ChallengeForm(ModelForm):
 			'size': 5,
 			'class': 'form-control'
 			}))
+
+

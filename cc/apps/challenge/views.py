@@ -41,7 +41,9 @@ class CreateView(View):
         rule_formset = AddRuleFormset(request.POST)
 
         if form.is_valid():
-            challenge = form.save()
+            challenge = form.save(commit=False)
+            challenge.owner = request.user.coder
+            challenge.save()
 
             rule_formset = AddRuleFormset(request.POST, instance=challenge)
             if rule_formset.is_valid():

@@ -2,7 +2,10 @@
 
 {% block contents %}
 
-	{{ object }}
+	<header>
+		<h1>{{ object.name }}</h1>
+		<p>This challenge is owned by {{ object.owner }}</p>
+	</header>
 
 	{% if user.is_authenticated and not already_joined %}
 	<a class="btn btn-primary btn-lg" href="{% url 'challenge:join' object.id %}">Join this challenge</a>
