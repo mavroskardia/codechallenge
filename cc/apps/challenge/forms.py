@@ -6,7 +6,7 @@ from .models import Challenge
 from .models import Rule
 
 
-AddRuleFormset = inlineformset_factory(Challenge, Rule, can_delete=False, extra=1)
+AddRuleFormset = inlineformset_factory(Challenge, Rule, can_delete=False, extra=0)
 
 class ChallengeForm(ModelForm):
 	class Meta:
