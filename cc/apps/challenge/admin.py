@@ -1,12 +1,18 @@
 from django.contrib import admin
 
-from .models import Challenge, Rule
+from .models import Challenge, Rule, Participant
 
 
 class RuleInline(admin.StackedInline):
 	model = Rule
 
+class ParticipantInline(admin.StackedInline):
+	model = Participant
+	readonly_fields = ('is_owner',)
+
 class ChallengeAdmin(admin.ModelAdmin):
-	inlines = [RuleInline,]
+	fields = ('name', 'duration',)
+	inlines = [RuleInline, ParticipantInline,]
 
 admin.site.register(Challenge, ChallengeAdmin)
+admin.site.register(Participant)

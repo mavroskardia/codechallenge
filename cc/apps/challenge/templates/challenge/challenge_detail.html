@@ -4,7 +4,7 @@
 
 	<header>
 		<h1>{{ object.name }}</h1>
-		<p>This challenge is owned by {{ object.owner }}</p>
+		<p>This challenge is owned by {{ owner }}</p>
 	</header>
 
 	{% if user.is_authenticated and not already_joined %}

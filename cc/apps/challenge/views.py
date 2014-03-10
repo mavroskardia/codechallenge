@@ -8,8 +8,7 @@ from django.core.urlresolvers import reverse
 from django.contrib.auth.decorators import login_required
 from django.utils.decorators import method_decorator
 
-from .models import Rule
-from .models import Challenge
+from .models import Challenge, Participant, Rule
 from .forms import ChallengeForm, AddRuleFormset, AddRuleTemplateFormset
 
 
@@ -21,7 +20,8 @@ class DetailView(generic.DetailView):
 
     def get_context_data(self, **kwargs):
         context = super(DetailView, self).get_context_data(**kwargs)
-        context['already_joined'] = Challenge.objects.filter(coder__user__id=self.request.user.id).exists()
+        context['owner'] = context['object'].participant_set.get(is_owner=True)
+        context['already_joined'] = Challenge.objects.filter(participant__coder__user__id=self.request.user.id).exists()
         return context
 
 class CreateView(View):
@@ -41,9 +41,14 @@ class CreateView(View):
         rule_formset = AddRuleFormset(request.POST)
 
         if form.is_valid():
-            challenge = form.save(commit=False)
-            challenge.owner = request.user.coder
-            challenge.save()
+            challenge = form.save()
+
+            # todo: move this to the Challenge clean() method
+            participant = Participant()
+            participant.coder = request.user.coder
+            participant.challenge = challenge
+            participant.is_owner = True
+            participant.save()
 
             rule_formset = AddRuleFormset(request.POST, instance=challenge)
             if rule_formset.is_valid():

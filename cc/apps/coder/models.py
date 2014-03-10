@@ -1,13 +1,13 @@
 from django.db import models
 from django.contrib.auth.models import User
 
+
 class Coder(models.Model):
 	user = models.OneToOneField(User)
 	name = models.CharField(max_length=256, blank=True)
 	tagline = models.CharField(max_length=1024, blank=True)
 	about = models.TextField(blank=True)
 	xp = models.BigIntegerField(default=0)
-	challenges = models.ManyToManyField('challenge.Challenge', blank=True, null=True)
 
 	def level(self):
 		return Level.objects.filter(starting_xp__lte=self.xp).order_by('-starting_xp').first()
