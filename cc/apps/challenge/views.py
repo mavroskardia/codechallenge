@@ -10,7 +10,7 @@ from django.utils.decorators import method_decorator
 
 from .models import Rule
 from .models import Challenge
-from .forms import ChallengeForm, AddRuleFormset
+from .forms import ChallengeForm, AddRuleFormset, AddRuleTemplateFormset
 
 
 class IndexView(generic.ListView):
@@ -78,3 +78,19 @@ class LeaveView(View):
             messages.error(request, 'You had never joined this challenge.')
 
         return HttpResponseRedirect(reverse('challenge:detail', args=(pk,)))
+
+class AddRuleTemplate(View):
+    template_name = 'challenge/add_rule_template.html'
+
+    @method_decorator(login_required)
+    def get(self, request, rule_count, *args, **kwargs):
+        rule_formset = AddRuleTemplateFormset(instance=Challenge())
+
+        formset = rule_formset.form(
+            auto_id=rule_formset.auto_id,
+            prefix=rule_formset.add_prefix(rule_count),
+            empty_permitted=True,
+        )
+        rule_formset.add_fields(formset, None)
+
+        return render(request, self.template_name, { 'rule_formset': formset })

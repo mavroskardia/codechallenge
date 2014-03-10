@@ -13,7 +13,7 @@
 	{% endfor %}
 
 	<div id="js-rules">
-		{{ rule_formset.as_p }}
+		{{ rule_formset }}
 		<button type="button" onclick="AddRule();">Add Rule</button>
 	</div>
 
@@ -31,21 +31,14 @@
 	var ruleCount = parseInt($totalForms.val());
 
 	function AddRule() {
-		$('#js-rules').append('\
-			<p>\
-				<label for="id_rule_set-' + ruleCount + '-description">Description:</label>\
-				<textarea cols="40" id="id_rule_set-' + ruleCount + '-description" name="rule_set-' + ruleCount + '-description" rows="10"></textarea>\
-				<button type="button" onclick="DeleteRule(this);">Delete</button>\
-				<input id="id_rule_set-' + ruleCount + '-challenge" name="rule_set-' + ruleCount + '-challenge" type="hidden" />\
-				<input id="id_rule_set-' + ruleCount + '-id" name="rule_set-' + ruleCount + '-id" type="hidden" />\
-			</p>\
-		');
-		
-		$totalForms.val(++ruleCount);
+		$.get('/challenge/add_rule_template/' + ruleCount, function(data) {
+			$('#js-rules').append(data);
+			$totalForms.val(++ruleCount);
+		});
 	}
 
 	function DeleteRule(btn) {
-		$(btn).parent('p').remove();
+		$(btn).parents('[data-rule]').remove();
 	}
 
 </script>
