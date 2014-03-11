@@ -2,7 +2,10 @@
 
 {% block contents %}
 
-	<h1>Coders</h1>
+	<h1>
+		Coders
+		<small><a href="{% url 'auth:register' %}"><i class="fa fa-plus-circle"></i></a></small>
+	</h1>
 
 	<ul class="nav nav-stacked nav-pills">
 	{% for coder in object_list %}

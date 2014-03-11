@@ -3,10 +3,12 @@
 {% block contents %}
 
 	<header>
-		<h1>Challenges</h1>
-		{% if user.is_authenticated and user.coder %}
-		<a class="btn btn-primary" href="{% url 'challenge:create' %}">Create Challenge</a>
-		{% endif %}
+		<h1>
+			Challenges
+			{% if user.is_authenticated and user.coder %}
+			<small><a href="{% url 'challenge:create' %}"><i class="fa fa-plus-circle"></i></a></small>
+			{% endif %}
+		</h1>
 	</header>
 
 	<ul class="nav nav-pills nav-stacked">
@@ -14,12 +16,24 @@
 		<li>
 			<a href="{% url 'challenge:detail' challenge.id %}">
 				{{ challenge.name }}
-				<span class="badge badge-info">
-					{{ challenge.participant_set.all|length }} participating
-				</span>
+				<span class="badge" title="Number of coders participating in this challenge">{{ challenge.participant_set.count }}</span>
+				{% if challenge in challenges_im_in %}
+				<span class="label label-success" title="You are participating in this challenge"><i class="fa fa-check"></i></span>
+				{% endif %}
 			</a>
 		</li>
 	{% endfor %}
 	</ul>
 
+{% endblock %}
+
+{% block extrascripts %}
+	<script>
+		$('[title]').tooltip({
+			delay: {
+				show: 1000,
+				hide: 0
+			}
+		});
+	</script>
 {% endblock %}
