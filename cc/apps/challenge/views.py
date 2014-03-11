@@ -6,6 +6,7 @@ from django.contrib import messages
 from django.http import HttpResponseRedirect
 from django.core.urlresolvers import reverse
 from django.contrib.auth.decorators import login_required
+from django.utils import timezone
 from django.utils.decorators import method_decorator
 
 from .models import Challenge, Participant, Rule
@@ -33,6 +34,7 @@ class DetailView(generic.DetailView):
         context['owner'] = challenge.participant_set.get(is_owner=True)
         context['participant'] = challenge.participant_set.filter(coder=self.request.user.coder)
         context['already_joined'] = context['participant'].exists()
+        context['now'] = timezone.now()
         context['challenge'] = challenge
 
         return context
