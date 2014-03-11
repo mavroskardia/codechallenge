@@ -16,13 +16,38 @@ from .forms import ChallengeForm, AddRuleFormset, AddRuleTemplateFormset
 class IndexView(generic.ListView):
     model = Challenge
 
-class DetailView(generic.DetailView):
-    model = Challenge
+class DetailView(View):
+    form_class = ChallengeForm
+    template_name = 'challenge/challenge_detail.html'
 
-    def get_context_data(self, **kwargs):
-        context = super(DetailView, self).get_context_data(**kwargs)
-        context['already_joined'] = Challenge.objects.filter(coder__user__id=self.request.user.id).exists()
-        return context
+    def get(self, request, pk, *args, **kwargs):
+        challenge = get_object_or_404(Challenge, pk=pk)
+        return render(request, self.template_name, self.get_data(request, challenge))
+
+    @method_decorator(login_required)
+    def post(self, request, pk, *args, **kwargs):
+        challenge = get_object_or_404(Challenge, pk=pk)
+
+        if (challenge.owner != request.user.coder):
+            messages.error(request, 'Can not update a challenge that you do not own.')
+        else:
+            form = self.form_class(request.POST, instance=challenge)
+            if form.is_valid():
+                form.save()
+                messages.info(request, 'Challenge updated.')
+
+            return render(request, self.template_name, self.get_data(request, challenge))
+
+    def get_data(self, request, challenge):
+        already_joined = Challenge.objects.filter(coder__user__id=request.user.id).exists()
+        owner = challenge.owner == request.user.coder
+        data = { 'challenge': challenge, 'already_joined': already_joined, 'owner': owner }
+        
+        if owner:
+            form = self.form_class(instance=challenge)
+            data['form'] = form
+
+        return data
 
 class CreateView(View):
     form_class = ChallengeForm

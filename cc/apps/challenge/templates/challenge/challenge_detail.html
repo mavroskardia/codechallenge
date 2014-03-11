@@ -3,22 +3,38 @@
 {% block contents %}
 
 	<header>
-		<h1>{{ object.name }}</h1>
-		<p>This challenge is owned by {{ object.owner }}</p>
+		<h1>
+			{% if owner %}
+				<span data-name onclick="Edit(this);">{{ challenge.name }}</span>
+				<form data-form-name onkeydown="Submit();" action="{% url 'challenge:detail' challenge.id %}" method="post" class="col-12 col-lg-5 text-left" style="
+				display:none">
+					{% csrf_token %}
+					{{ form.non_field_errors }}
+					{{ form.name }}
+					{{ form.name.errors }}
+					<div class="form-group">
+						<button type="submit" class="btn btn-primary btn-lg">Update Challenge</button>
+					</div>
+				</form>
+			{% else %}
+				{{ challenge.name }}
+			{% endif %}
+		</h1>
+		<p>This challenge is owned by {{ challenge.owner }}</p>
 	</header>
 
 	{% if user.is_authenticated and not already_joined %}
-	<a class="btn btn-primary btn-lg" href="{% url 'challenge:join' object.id %}">Join this challenge</a>
+	<a class="btn btn-primary btn-lg" href="{% url 'challenge:join' challenge.id %}">Join this challenge</a>
 	{% endif %}
 
 	{% if user.is_authenticated and already_joined %}
-	<a class="btn btn-primary btn-lg" href="{% url 'challenge:leave' object.id %}">Leave this challenge</a>
+	<a class="btn btn-primary btn-lg" href="{% url 'challenge:leave' challenge.id %}">Leave this challenge</a>
 	{% endif %}
 
-	{% if object.coder_set.count > 0 %}
+	{% if challenge.coder_set.count > 0 %}
 	<h3>Coders on this challenge</h3>
 	<ul>
-		{% for coder in object.coder_set.all %}
+		{% for coder in challenge.coder_set.all %}
 		<li><a href="{% url 'coder:profile' coder.user.username %}">{{coder}}</a></li>
 		{% endfor %}
 	</ul>
@@ -27,9 +43,29 @@
 	<h3>Rules</h3>
 
 	<ul>
-	{% for rule in object.rule_set.all %}
-		<li>{{rule}}</li>
+	{% for rule in challenge.rule_set.all %}
+		<li>{{ rule }}</li>
 	{% endfor %}
 	</ul>
+
+{% endblock %}
+
+{% block extrascripts %}
+
+<script type="text/javascript">
+	function Edit(elt) {
+		var $elt = $(elt);
+		$elt.hide();
+
+		var $form = $elt.siblings('[data-form-name]');
+		$form.show();
+		$(':input', $form).focus();
+	}
+
+	function Submit(e) {
+		if (e.which == 13)
+			console.log(13);
+	}
+</script>
 
 {% endblock %}

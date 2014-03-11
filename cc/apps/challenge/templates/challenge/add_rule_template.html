@@ -1,10 +1,4 @@
 <div data-rule>
-	{% for field in rule_formset %}
-		<div class="form-group">
-			{{ field.label }}
-			{{ field }}
-			{{ field.errors }}
-		</div>
-	{% endfor %}
+	{{ rule_formset }}
 	<button type="button" onclick="DeleteRule(this);">Delete</button>
 </div>
