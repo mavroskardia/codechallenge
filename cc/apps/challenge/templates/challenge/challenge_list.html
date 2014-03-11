@@ -13,7 +13,7 @@
 	{% for challenge in challenge_list %}
 		<li>
 			<a href="{% url 'challenge:detail' challenge.id %}">{{ challenge.name }}</a>
-			<span class="badge badge-info">{{ challenge.coder_set.count }} participating</span>
+			<span class="badge badge-info">{{ challenge.participant_set.all|length }} participating</span>
 		</li>
 	{% endfor %}
 	</ul>

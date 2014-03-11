@@ -44,7 +44,7 @@ class CreateView(View):
             challenge = form.save()
 
             # todo: move this to the Challenge clean() or save() method
-            participant = Participant(coder=request.user.coder, challange=challange, is_owner=True)
+            participant = Participant(coder=request.user.coder, challenge=challenge, is_owner=True)
             participant.save()
 
             rule_formset = AddRuleFormset(request.POST, instance=challenge)
