@@ -16,6 +16,7 @@
 </head>
 <body>
     <header id="header">
+        <canvas id="binary_canvas" class="pull-right" width="500" height="75"></canvas>
         <h1><a href="{% url 'home' %}">Code Challenge</a></h1>
         <nav class="navbar navbar-default">
             <ul class="nav navbar-nav">
@@ -55,6 +56,9 @@
 
     <script src="{% static 'jquery/dist/jquery.js' %}"></script>
     <script src="{% static 'bootstrap/dist/js/bootstrap.js' %}"></script>
+
+    <script src="{% static 'js/header_animator.js' %}"></script>
+    <script src="{% static 'js/juicy.js' %}"></script>
 
     {% block extrascripts %}
     {% endblock %}
