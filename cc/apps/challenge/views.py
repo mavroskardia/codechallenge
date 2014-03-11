@@ -21,7 +21,7 @@ class DetailView(generic.DetailView):
     def get_context_data(self, **kwargs):
         context = super(DetailView, self).get_context_data(**kwargs)
         context['owner'] = context['object'].participant_set.get(is_owner=True)
-        context['already_joined'] = Challenge.objects.filter(participant__coder__user__id=self.request.user.id).exists()
+        context['already_joined'] = context['object'].participant_set.filter(coder=self.request.user.coder).exists()
         return context
 
 class CreateView(View):
@@ -43,11 +43,8 @@ class CreateView(View):
         if form.is_valid():
             challenge = form.save()
 
-            # todo: move this to the Challenge clean() method
-            participant = Participant()
-            participant.coder = request.user.coder
-            participant.challenge = challenge
-            participant.is_owner = True
+            # todo: move this to the Challenge clean() or save() method
+            participant = Participant(coder=request.user.coder, challange=challange, is_owner=True)
             participant.save()
 
             rule_formset = AddRuleFormset(request.POST, instance=challenge)
@@ -63,11 +60,11 @@ class JoinView(View):
     @method_decorator(login_required)
     def get(self, request, pk, *args, **kwargs):
         challenge = get_object_or_404(Challenge, pk=pk)
-        if challenge.coder_set.filter(pk=request.user.coder.id).exists():
+        if challenge.participant_set.filter(coder=request.user.coder).exists():
             messages.error(request, 'Trying to join a challenge you are already participating in. Contacting the NSA and FBI and CIA.')
         else:
-            challenge.coder_set.add(request.user.coder)
-            challenge.save()
+            p = Participant(coder=request.user.coder, challenge=challenge)
+            p.save()
             messages.info(request, 'Joined Challenge!')
 
         return HttpResponseRedirect(reverse('challenge:detail', args=(pk,)))
@@ -77,9 +74,9 @@ class LeaveView(View):
     @method_decorator(login_required)
     def get(self, request, pk, *args, **kwargs):
         challenge = get_object_or_404(Challenge, pk=pk)
-        if challenge.coder_set.filter(pk=request.user.coder.id).exists():
-            challenge.coder_set.remove(request.user.coder)
-            challenge.save()
+        cp = challenge.participant_set.filter(coder=request.user.coder)
+        if cp.exists():
+            cp.delete()
             messages.info(request, 'Left challenge.  Quitters never win.')
         else:
             messages.error(request, 'You had never joined this challenge.')
