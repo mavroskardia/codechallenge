@@ -9,11 +9,15 @@
 		{% endif %}
 	</header>
 
-	<ul class="list-unstyled">
+	<ul class="nav nav-pills nav-stacked">
 	{% for challenge in challenge_list %}
 		<li>
-			<a href="{% url 'challenge:detail' challenge.id %}">{{ challenge.name }}</a>
-			<span class="badge badge-info">{{ challenge.participant_set.all|length }} participating</span>
+			<a href="{% url 'challenge:detail' challenge.id %}">
+				{{ challenge.name }}
+				<span class="badge badge-info">
+					{{ challenge.participant_set.all|length }} participating
+				</span>
+			</a>
 		</li>
 	{% endfor %}
 	</ul>

@@ -4,9 +4,14 @@
 
 	<h1>Coders</h1>
 
-	<ul>
+	<ul class="nav nav-stacked nav-pills">
 	{% for coder in object_list %}
-		<li><a href="{% url 'coder:profile' coder.user.username %}">{{coder}}</a></li>
+		<li>
+			<a href="{% url 'coder:profile' coder.user.username %}">
+				{{coder.webname}}
+				<span class="badge badge-info">{{ coder.level.name }}</span>
+			</a>
+		</li>
 	{% endfor %}
 	</ul>
 
