@@ -40,14 +40,14 @@ class Participant(models.Model):
 		return datetime.timedelta(days=self.challenge.duration) + self.date_joined
 
 	def days_left(self):
-		dt = self.end_date() - timezone.now()
-		return (dt).total_seconds() / (3600*24)
+		elapsed = timezone.now() - self.date_joined
+		return self.challenge.duration - elapsed.days
 
 	def percent_complete(self):
 		now = timezone.now()
 		end = self.end_date()
 
-		return 100 - (end - now).total_seconds() / (end - self.date_joined).total_seconds()
+		return (end - now).total_seconds() / (end - self.date_joined).total_seconds() * 100
 
 	def clean(self, *args, **kwargs):
 		error_txt = 'There can only be one owner per Challenge'

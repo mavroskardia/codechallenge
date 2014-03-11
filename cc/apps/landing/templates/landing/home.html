@@ -31,7 +31,12 @@
 			<li><a href="{% url 'auth:register' %}">Signup to be a coder</a></li>
 		</ul>
 	{% else %}
-	<p>Welcome back, {{ user.coder.name }}.</p>
+		<p>Welcome back, {{ user.coder.name }}. Here are your active challenges:</p>
+		<ul class="nav nav-pills nav-stacked pull-left">
+		{% for p in user.coder.participant_set.all %}
+			<li><a href="{% url 'challenge:detail' p.challenge.id %}">{{ p.challenge.name }}</a></li>
+		{% endfor %}
+		</ul>
 	{% endif %}
 	</div>
 
