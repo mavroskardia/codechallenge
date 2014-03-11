@@ -33,7 +33,7 @@
             </ul>
         </nav>
     </header>
-    <div id="contents">
+    <div id="contents" class="container-fluid">
         {% if messages %}
             <ul class="messages list-unstyled nav nav-pills">
             {% for message in messages %}
@@ -45,8 +45,10 @@
             </ul>
         {% endif %}
 
-    {% block contents %}
-    {% endblock %}
+        <div class="content-container">
+        {% block contents %}
+        {% endblock %}
+        </div>
     </div>
     <footer>
     </footer>

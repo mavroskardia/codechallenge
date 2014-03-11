@@ -1,28 +1,29 @@
 {% extends 'base.html' %}
 
 {% block contents %}
-	<p>Don't have a login yet? <a href="{% url 'auth:register' %}">Register!</a></p>
+	<div class="row">
+		<p>Don't have a login yet? <a href="{% url 'auth:register' %}">Register!</a></p>
 
-	{% if form.errors %}
-	<div class="alert alert-danger alert-dismissble">
-		<button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
-		<span>Invalid username or password.</span>
-	</div>
-	{% endif %}
-
-	<form action="{% url 'auth:login' %}" method="post" class="col-12 col-lg-5 text-left">
-		{% csrf_token %}
-		<input type="hidden" name="next" value="{{ next }}" />
-		{% for field in form %}
-			<div class="form-group">
-	            {{ field.label }}
-				{{ field }}
-	            {{ field.errors }}
-			</div>
-		{% endfor %}
-		<div class="form-group">
-			<button type="submit" class="btn btn-primary btn-lg">Login</button>
+		{% if form.errors %}
+		<div class="alert alert-danger alert-dismissble">
+			<button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
+			<span>Invalid username or password.</span>
 		</div>
-	</form>
+		{% endif %}
 
+		<form action="{% url 'auth:login' %}" method="post" class="col-12 col-lg-5 text-left">
+			{% csrf_token %}
+			<input type="hidden" name="next" value="{{ next }}" />
+			{% for field in form %}
+				<div class="form-group">
+		            {{ field.label }}
+					{{ field }}
+		            {{ field.errors }}
+				</div>
+			{% endfor %}
+			<div class="form-group">
+				<button type="submit" class="btn btn-primary btn-lg">Login</button>
+			</div>
+		</form>
+	</div>
 {% endblock %}
