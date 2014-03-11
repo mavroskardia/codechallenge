@@ -24,8 +24,8 @@
 			<li>
 				<span class="key">Challenges</span>
 				<ul>
-				{% for challenge in coder.challenges.all %}
-					<li><a href="{% url 'challenge:detail' challenge.id %}">{{ challenge }}</a></li>
+				{% for participant in coder.participant_set.all %}
+					<li><a href="{% url 'challenge:detail' participant.challenge.id %}">{{ participant.challenge }}</a></li>
 				{% endfor %}
 				</ul>
 			</li>
