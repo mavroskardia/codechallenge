@@ -20,8 +20,13 @@ class DetailView(generic.DetailView):
 
     def get_context_data(self, **kwargs):
         context = super(DetailView, self).get_context_data(**kwargs)
-        context['owner'] = context['object'].participant_set.get(is_owner=True)
-        context['already_joined'] = context['object'].participant_set.filter(coder=self.request.user.coder).exists()
+        challenge = context['object']
+
+        context['owner'] = challenge.participant_set.get(is_owner=True)
+        context['participant'] = challenge.participant_set.filter(coder=self.request.user.coder)
+        context['already_joined'] = context['participant'].exists()
+        context['challenge'] = challenge
+
         return context
 
 class CreateView(View):

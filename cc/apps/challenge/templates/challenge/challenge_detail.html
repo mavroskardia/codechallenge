@@ -2,9 +2,18 @@
 
 {% block contents %}
 
+	<aside id="participant_info" class="pull-right">
+	{% for p in participant %}
+		<h3>Stats</h3>
+		<ul class="list-unstyled">
+			<li>{{ owner.coder.webname }} is the owner</li>
+			<li>You've been working on this challenge since {{ p.date_joined }}</li>
+		</ul>
+	{% endfor %}
+	</aside>
+
 	<header>
 		<h1>{{ object.name }}</h1>
-		<p>This challenge is owned by {{ owner }}</p>
 	</header>
 
 	{% if user.is_authenticated and not already_joined %}
