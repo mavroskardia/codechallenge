@@ -2,6 +2,7 @@ from django.http import HttpResponseRedirect
 from django.shortcuts import render
 from django.views.generic.base import View
 from django.views.generic import TemplateView
+from django.db import IntegrityError
 from django.contrib import auth
 from django.contrib.auth import login, logout, authenticate
 from django.contrib.auth.models import User
@@ -28,7 +29,12 @@ class RegisterView(View):
             password = form.cleaned_data.get('password')
             email = form.cleaned_data.get('email')
 
-            user = User.objects.create_user(username, email, password)
+            try:
+                user = User.objects.create_user(username, email, password)
+            except IntegrityError as ie:
+                messages.error(request, 'A user with this username already exists')
+                return render(request, self.template_name, { 'form': form })
+
             coder = Coder()
             coder.user = user
             coder.save()

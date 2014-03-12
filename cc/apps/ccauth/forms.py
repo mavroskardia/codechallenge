@@ -17,9 +17,9 @@ class RegistrationForm(forms.Form):
 		cleaned_data = super(RegistrationForm, self).clean()
 		username = cleaned_data.get('username')
 		password = cleaned_data.get('password')
-		confirmpassword = cleaned_data.get('confirmpassword')
-		email = cleaned_data.get('email')
-		confirmemail = cleaned_data.get('confirmemail')
+		confirmpassword = cleaned_data.get('confirmpassword', '')
+		email = cleaned_data.get('email', '')
+		confirmemail = cleaned_data.get('confirmemail', '')
 
 		if password != confirmpassword:
 			self._errors['password'] = self.error_class([u'Password confirmation and password do not match.'])

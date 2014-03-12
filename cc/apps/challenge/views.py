@@ -6,10 +6,10 @@ from django.contrib import messages
 from django.http import HttpResponseRedirect
 from django.core.urlresolvers import reverse
 from django.contrib.auth.decorators import login_required
+from django.utils import timezone
 from django.utils.decorators import method_decorator
 
-from .models import Rule
-from .models import Challenge
+from .models import Challenge, Participant, Rule
 from .forms import ChallengeForm, AddRuleFormset, AddRuleTemplateFormset
 
 
@@ -28,7 +28,7 @@ class DetailView(View):
     def post(self, request, pk, *args, **kwargs):
         challenge = get_object_or_404(Challenge, pk=pk)
 
-        if (challenge.owner != request.user.coder):
+        if (challenge.owner().coder != request.user.coder):
             messages.error(request, 'Can not update a challenge that you do not own.')
         else:
             form = self.form_class(request.POST, instance=challenge)
@@ -39,13 +39,20 @@ class DetailView(View):
             return render(request, self.template_name, self.get_data(request, challenge))
 
     def get_data(self, request, challenge):
-        already_joined = Challenge.objects.filter(coder__user__id=request.user.id).exists()
-        owner = challenge.owner == request.user.coder
-        data = { 'challenge': challenge, 'already_joined': already_joined, 'owner': owner }
-        
-        if owner:
+        data = { 'challenge': challenge }
+        data['owner'] = challenge.owner()
+        data['is_owner'] = data['owner'].coder == request.user.coder
+        data['participant'] = challenge.participant_set.filter(coder=request.user.coder)
+        data['already_joined'] = data['participant'].exists()
+        data['now'] = timezone.now()
+        data['challenge'] = challenge
+
+        if data['is_owner']:
             form = self.form_class(instance=challenge)
             data['form'] = form
+
+        if request.user.is_authenticated and not request.user.is_anonymous():
+            data['challenges_im_in'] = Challenge.objects.filter(participant__coder=request.user.coder)
 
         return data
 
@@ -66,9 +73,11 @@ class CreateView(View):
         rule_formset = AddRuleFormset(request.POST)
 
         if form.is_valid():
-            challenge = form.save(commit=False)
-            challenge.owner = request.user.coder
-            challenge.save()
+            challenge = form.save()
+
+            # todo: move this to the Challenge clean() or save() method
+            participant = Participant(coder=request.user.coder, challenge=challenge, is_owner=True)
+            participant.save()
 
             rule_formset = AddRuleFormset(request.POST, instance=challenge)
             if rule_formset.is_valid():
@@ -83,11 +92,11 @@ class JoinView(View):
     @method_decorator(login_required)
     def get(self, request, pk, *args, **kwargs):
         challenge = get_object_or_404(Challenge, pk=pk)
-        if challenge.coder_set.filter(pk=request.user.coder.id).exists():
+        if challenge.participant_set.filter(coder=request.user.coder).exists():
             messages.error(request, 'Trying to join a challenge you are already participating in. Contacting the NSA and FBI and CIA.')
         else:
-            challenge.coder_set.add(request.user.coder)
-            challenge.save()
+            p = Participant(coder=request.user.coder, challenge=challenge)
+            p.save()
             messages.info(request, 'Joined Challenge!')
 
         return HttpResponseRedirect(reverse('challenge:detail', args=(pk,)))
@@ -97,9 +106,9 @@ class LeaveView(View):
     @method_decorator(login_required)
     def get(self, request, pk, *args, **kwargs):
         challenge = get_object_or_404(Challenge, pk=pk)
-        if challenge.coder_set.filter(pk=request.user.coder.id).exists():
-            challenge.coder_set.remove(request.user.coder)
-            challenge.save()
+        cp = challenge.participant_set.filter(coder=request.user.coder)
+        if cp.exists():
+            cp.delete()
             messages.info(request, 'Left challenge.  Quitters never win.')
         else:
             messages.error(request, 'You had never joined this challenge.')

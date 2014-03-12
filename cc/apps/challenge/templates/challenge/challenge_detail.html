@@ -2,9 +2,27 @@
 
 {% block contents %}
 
+	<aside id="participant_info" class="pull-right">
+	{% for p in participant %}
+		<h3>Stats</h3>
+		<ul class="list-unstyled">
+			<li>{{ owner.coder.webname }} is the owner</li>
+			<li>You've been working on this challenge since <strong>{{ p.date_joined }}</strong></li>
+			<li>This challenge ends on <strong>{{ p.end_date }}</strong> for you</li>
+			<li>
+				<div class="progress">
+					<div class="progress-bar" role="progressbar" aria-valuenow="" aria-valuemin="0" aria-valuemax="100" style="width: {{ p.percent_complete }}%">
+						<span>{{ p.days_left|floatformat:2 }} days left</span>
+					</div>
+				</div>
+			</li>
+		</ul>
+	{% endfor %}
+	</aside>
+
 	<header>
 		<h1>
-			{% if owner %}
+			{% if is_owner %}
 				<span data-name onclick="Edit(this);">{{ challenge.name }}</span>
 				<form data-form-name onkeydown="Submit();" action="{% url 'challenge:detail' challenge.id %}" method="post" class="col-12 col-lg-5 text-left" style="
 				display:none">
@@ -20,7 +38,6 @@
 				{{ challenge.name }}
 			{% endif %}
 		</h1>
-		<p>This challenge is owned by {{ challenge.owner }}</p>
 	</header>
 
 	{% if user.is_authenticated and not already_joined %}

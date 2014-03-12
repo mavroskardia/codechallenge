@@ -1,14 +1,43 @@
 {% extends 'base.html' %}
 
 {% block contents %}
-	<h2>Welcome</h2>
+	<aside class="pull-right">
+		<h4>Recent Challenges</h4>
+		<ul class="nav nav-stacked nav-pills">
+		{% for c in challenges %}
+			<li><a href="{% url 'challenge:detail' c.id %}">{{ c.name }}</a></li>
+		{% endfor %}
+		</ul>
+	</aside>
 
-	<p>This is the introductory paragraph about Code Challenge.</p>
+	<aside class="pull-right">
+		<h4>Top Coders</h4>
+		<ul class="nav nav-stacked nav-pills">
+		{% for c in coders %}
+			<li><a href="{% url 'coder:profile' c.id %}">{{ c.webname }}</a></li>
+		{% endfor %}
+		</ul>
+	</aside>
 
+	<h2>
+		Welcome
+		<small>Sign up to be a coder, participate in challenges, earn experience points.</small>
+	</h2>
+
+	<div class="row">
 	{% if not user.is_authenticated %}
-	<p>You're not logged in. This is what you can do:</p>
+		<p>You're not logged in. This is what you can do:</p>
+		<ul class="nav nav-stacked nav-pills pull-left">
+			<li><a href="{% url 'auth:register' %}">Signup to be a coder</a></li>
+		</ul>
 	{% else %}
-	<p>Welcome back, {{ user.coder.name }}.</p>
+		<p>Welcome back, {{ user.coder.name }}. Here are your active challenges:</p>
+		<ul class="nav nav-pills nav-stacked pull-left">
+		{% for p in user.coder.participant_set.all %}
+			<li><a href="{% url 'challenge:detail' p.challenge.id %}">{{ p.challenge.name }}</a></li>
+		{% endfor %}
+		</ul>
 	{% endif %}
+	</div>
 
 {% endblock %}
