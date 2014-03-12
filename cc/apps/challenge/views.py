@@ -33,28 +33,13 @@ class DetailView(View):
         challenge = get_object_or_404(Challenge, pk=pk)
         return render(request, self.template_name, self.get_data(request, challenge))
 
-    @method_decorator(login_required)
-    def post(self, request, pk, *args, **kwargs):
-        challenge = get_object_or_404(Challenge, pk=pk)
-
-        if (challenge.owner != request.user.coder):
-            messages.error(request, 'Can not update a challenge that you do not own.')
-        else:
-            form = self.form_class(request.POST, instance=challenge)
-            if form.is_valid():
-                form.save()
-                messages.info(request, 'Challenge updated.')
-            data = self.get_data(request, challenge)
-            data['form'] = form
-
-            return render(request, self.template_name, data)
-
     def get_data(self, request, challenge):
         data = { 'challenge': challenge }
         data['now'] = timezone.now()
         data['challenge'] = challenge
 
-        if request.user.is_authenticated() and not request.user.is_anonymous() and Coder.objects.filter(user=request.user).exists():            
+        if request.user.is_authenticated() and not request.user.is_anonymous() and Coder.objects.filter(user=request.user).exists():
+            data['form'] = self.form_class()
             data['challenges_im_in'] = Challenge.objects.filter(participant__coder=request.user.coder)
             data['is_owner'] = challenge.owner == request.user.coder
 
@@ -68,13 +53,13 @@ class UpdateView(View):
     @method_decorator(login_required)
     def post(self, request, pk, *args, **kwargs):
         challenge = get_object_or_404(Challenge, pk=pk)
-        if (challenge.owner != request.user.coder):
-            messages.error(request, 'Can not update a challenge that you do not own.')
-        else:
+
+        if (challenge.owner == request.user.coder):
             setattr(challenge, request.POST['name'], request.POST['value'])
             challenge.save()
-            messages.info(request, 'Challenge updated.')
-            return HttpResponse('done')
+            return HttpResponse('Challenge updated.')
+        else:
+            return HttpResponse('Can not update a challenge that you do not own.')
 
 class CreateView(View):
     form_class = ChallengeForm

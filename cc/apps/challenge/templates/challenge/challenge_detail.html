@@ -62,9 +62,10 @@
 <script type="text/javascript">
 	function Edit(elt) {
 		var $elt = $(elt);
-		$elt.hide();
-
 		var $input = $elt.siblings('[data-input]');
+		
+		$elt.hide();
+		
 		$input.show().focus().keydown(function(e) {
 			if (e.which == 13) {
 				
@@ -75,7 +76,8 @@
 				};
 
 				$.post('/challenge/{{ challenge.id }}/update', postData, function(data) {
-					console.log(data);
+					// $elt.val($(this).val()).show();
+					// $input.hide();
 				});
 			}
 		});
