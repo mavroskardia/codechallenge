@@ -67,3 +67,12 @@ class Participant(models.Model):
 	def __str__(self):
 		return self.__unicode__()
 
+
+class ChallengeComment(models.Model):
+	challenge = models.ForeignKey(Challenge)
+	coder = models.ForeignKey('coder.Coder')
+	date = models.DateField()
+	text = models.TextField()
+
+
+
