@@ -74,12 +74,12 @@ class CreateView(View):
 
     @method_decorator(login_required)
     def post(self, request, *args, **kwargs):
-        form = self.form_class(request.POST)
+        challenge = Challenge(owner=request.user.coder)
+        form = self.form_class(request.POST, instance=challenge)
         rule_formset = AddRuleFormset(request.POST)
 
         if form.is_valid():
             challenge = form.save()
-            challenge.owner = request.user.coder
 
             # todo: move this to the Challenge clean() or save() method
             participant = Participant(coder=request.user.coder, challenge=challenge, is_owner=True)
