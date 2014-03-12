@@ -6,8 +6,9 @@ from django.db import models
 
 
 class Challenge(models.Model):
-	name = models.CharField(max_length=256)
+	name = models.CharField(max_length=256, blank=False, null=True)
 	duration = models.IntegerField(verbose_name="Duration (days)")
+	owner = models.ForeignKey('coder.Coder')
 
 	def __unicode__(self):
 		return self.name

@@ -3,40 +3,46 @@
 {% block contents %}
 
 	<aside id="participant_info" class="pull-right">
-	{% for p in participant %}
 		<h3>Stats</h3>
 		<ul class="list-unstyled">
-			<li>{{ owner.coder.webname }} is the owner</li>
-			<li>You've been working on this challenge since <strong>{{ p.date_joined }}</strong></li>
-			<li>This challenge ends on <strong>{{ p.end_date }}</strong> for you</li>
+			<li>{{ challenge.owner.webname }} is the owner</li>
+			{% if participant %}
+			<li>You've been working on this challenge since <strong>{{ participant.date_joined }}</strong></li>
+			<li>This challenge ends on <strong>{{ participant.end_date }}</strong> for you</li>
 			<li>
 				<div class="progress">
-					<div class="progress-bar" role="progressbar" aria-valuenow="" aria-valuemin="0" aria-valuemax="100" style="width: {{ p.percent_complete }}%">
-						<span>{{ p.days_left|floatformat:2 }} days left</span>
+					<div class="progress-bar" role="progressbar" aria-valuenow="" aria-valuemin="0" aria-valuemax="100" style="width: {{ participant.percent_complete }}%">
+						<span>{{ participant.days_left|floatformat:2 }} days left</span>
 					</div>
 				</div>
 			</li>
+			{% endif %}
 		</ul>
-	{% endfor %}
 	</aside>
-
 	<header>
-		<h1>{{ object.name }}</h1>
+		<h1>
+			{% if is_owner %}
+				<span onclick="Edit(this);">{{ challenge.name }}</span>
+				<input data-input type="text" rel="name" value="{{ challenge.name }}" style="display:none;" />
+			{% else %}
+				{{ challenge.name }}
+			{% endif %}
+		</h1>
 	</header>
 
-	{% if user.is_authenticated and not already_joined %}
-	<a class="btn btn-primary btn-lg" href="{% url 'challenge:join' object.id %}">Join this challenge</a>
+	{% if user.is_authenticated %}
+		{% if participant %}
+		<a class="btn btn-primary btn-lg" href="{% url 'challenge:leave' challenge.id %}">Leave this challenge</a>
+		{% else %}
+		<a class="btn btn-primary btn-lg" href="{% url 'challenge:join' challenge.id %}">Join this challenge</a>
+		{% endif %}
 	{% endif %}
 
-	{% if user.is_authenticated and already_joined %}
-	<a class="btn btn-primary btn-lg" href="{% url 'challenge:leave' object.id %}">Leave this challenge</a>
-	{% endif %}
-
-	{% if object.coder_set.count > 0 %}
+	{% if challenge.partcipant_set.count > 0 %}
 	<h3>Coders on this challenge</h3>
 	<ul>
-		{% for coder in object.coder_set.all %}
-		<li><a href="{% url 'coder:profile' coder.user.username %}">{{coder}}</a></li>
+		{% for participant in challenge.partcipant_set.all %}
+		<li><a href="{% url 'coder:profile' participant.coder.user.username %}">{{participant.coder.webname}}</a></li>
 		{% endfor %}
 	</ul>
 	{% endif %}
@@ -44,9 +50,36 @@
 	<h3>Rules</h3>
 
 	<ul>
-	{% for rule in object.rule_set.all %}
-		<li>{{rule}}</li>
+	{% for rule in challenge.rule_set.all %}
+		<li>{{ rule }}</li>
 	{% endfor %}
 	</ul>
+
+{% endblock %}
+
+{% block extrascripts %}
+
+<script type="text/javascript">
+	function Edit(elt) {
+		var $elt = $(elt);
+		$elt.hide();
+
+		var $input = $elt.siblings('[data-input]');
+		$input.show().focus().keydown(function(e) {
+			if (e.which == 13) {
+				
+				var postData = {
+					csrfmiddlewaretoken: '{{ csrf_token }}',
+					name: $(this).attr('rel'),
+					value: $(this).val()
+				};
+
+				$.post('/challenge/{{ challenge.id }}/update', postData, function(data) {
+					console.log(data);
+				});
+			}
+		});
+	}
+</script>
 
 {% endblock %}
