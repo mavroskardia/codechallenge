@@ -37,7 +37,15 @@
 					{% endif %}
 				{% endif %}
 			</small>
-			<small>{{ challenge.duration }} day{{challenge.duration|pluralize}}</small>
+			<small>
+				{% if is_owner %}
+					<span onclick="Edit(this);">{{ challenge.duration }} </span>
+					<input data-input type="text" rel="duration" value="{{ challenge.duration }}" style="display:none;" />
+					day{{challenge.duration|pluralize}}					
+				{% else %}
+					{{ challenge.duration }} day{{challenge.duration|pluralize}}
+				{% endif %}
+			</small>
 		</h1>
 	</header>
 
@@ -88,8 +96,8 @@
 				};
 
 				$.post('/challenge/{{ challenge.id }}/update', postData, function(data) {
-					// $elt.val($(this).val()).show();
-					// $input.hide();
+					$elt.show().text($input.val());
+					$input.hide();
 				});
 			}
 		});
