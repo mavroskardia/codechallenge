@@ -81,3 +81,8 @@ class ChallengeComment(models.Model):
 		return self.__unicode__()
 
 
+class Submission(models.Model):
+	challenge = models.ForeignKey(Challenge)
+	participant = models.ForeignKey(Participant)
+	date = models.DateTimeField(default=lambda:timezone.now())
+	thefile = models.FileField(upload_to='submissions')

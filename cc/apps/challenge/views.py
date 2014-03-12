@@ -45,6 +45,7 @@ class DetailView(View):
             data['form'] = self.form_class()
             data['challenges_im_in'] = Challenge.objects.filter(participant__coder=request.user.coder)
             data['is_owner'] = challenge.owner == request.user.coder
+            data['can_comment'] = True
 
             participant_query = challenge.participant_set.filter(coder=request.user.coder)
             if participant_query.exists():
