@@ -83,6 +83,7 @@
 		</div>
 		{% endif %}
 
+		{% if challenge.challengecomment_set.count %}
 		<h4>Other Coder Comments</h4>
 
 		<dl class="dl-horizontal">
@@ -96,6 +97,7 @@
 			</dd>
 		{% endfor %}
 		</dl>
+		{% endif %}
 	</aside>
 
 {% endblock %}
