@@ -40,8 +40,8 @@ INSTALLED_APPS = (
     'compressor',
     'djangobower',
     'apps.landing',
-    'apps.challenge',
     'apps.coder',
+    'apps.challenge',
     'apps.ccauth'
 )
 

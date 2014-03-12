@@ -12,9 +12,18 @@ from django.utils.decorators import method_decorator
 from .models import Challenge, Participant, Rule
 from .forms import ChallengeForm, AddRuleFormset, AddRuleTemplateFormset
 
+from apps.coder.models import Coder
 
 class IndexView(generic.ListView):
     model = Challenge
+
+    def get_context_data(self, *args, **kwargs):
+        context = super(IndexView, self).get_context_data(*args, **kwargs)
+
+        if self.request.user.is_authenticated and not self.request.user.is_anonymous():
+            context['challenges_im_in'] = Challenge.objects.filter(participant__coder=self.request.user.coder)
+
+        return context
 
 class DetailView(View):
     form_class = ChallengeForm
@@ -28,33 +37,44 @@ class DetailView(View):
     def post(self, request, pk, *args, **kwargs):
         challenge = get_object_or_404(Challenge, pk=pk)
 
-        if (challenge.owner().coder != request.user.coder):
+        if (challenge.owner != request.user.coder):
             messages.error(request, 'Can not update a challenge that you do not own.')
         else:
             form = self.form_class(request.POST, instance=challenge)
             if form.is_valid():
                 form.save()
                 messages.info(request, 'Challenge updated.')
+            data = self.get_data(request, challenge)
+            data['form'] = form
 
-            return render(request, self.template_name, self.get_data(request, challenge))
+            return render(request, self.template_name, data)
 
     def get_data(self, request, challenge):
         data = { 'challenge': challenge }
-        data['owner'] = challenge.owner()
-        data['is_owner'] = data['owner'].coder == request.user.coder
-        data['participant'] = challenge.participant_set.filter(coder=request.user.coder)
-        data['already_joined'] = data['participant'].exists()
         data['now'] = timezone.now()
         data['challenge'] = challenge
 
-        if data['is_owner']:
-            form = self.form_class(instance=challenge)
-            data['form'] = form
-
-        if request.user.is_authenticated and not request.user.is_anonymous():
+        if request.user.is_authenticated() and not request.user.is_anonymous() and Coder.objects.filter(user=request.user).exists():            
             data['challenges_im_in'] = Challenge.objects.filter(participant__coder=request.user.coder)
+            data['is_owner'] = challenge.owner == request.user.coder
+
+            participant_query = challenge.participant_set.filter(coder=request.user.coder)            
+            if participant_query.exists():
+                data['participant'] = participant_query[0]
 
         return data
+
+class UpdateView(View):
+    @method_decorator(login_required)
+    def post(self, request, pk, *args, **kwargs):
+        challenge = get_object_or_404(Challenge, pk=pk)
+        if (challenge.owner != request.user.coder):
+            messages.error(request, 'Can not update a challenge that you do not own.')
+        else:
+            setattr(challenge, request.POST['name'], request.POST['value'])
+            challenge.save()
+            messages.info(request, 'Challenge updated.')
+            return HttpResponse('done')
 
 class CreateView(View):
     form_class = ChallengeForm
@@ -74,6 +94,7 @@ class CreateView(View):
 
         if form.is_valid():
             challenge = form.save()
+            challenge.owner = request.user.coder
 
             # todo: move this to the Challenge clean() or save() method
             participant = Participant(coder=request.user.coder, challenge=challenge, is_owner=True)

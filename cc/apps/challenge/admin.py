@@ -11,7 +11,7 @@ class ParticipantInline(admin.StackedInline):
 	readonly_fields = ('is_owner',)
 
 class ChallengeAdmin(admin.ModelAdmin):
-	fields = ('name', 'duration',)
+	fields = ('name', 'duration', 'owner',)
 	inlines = [RuleInline, ParticipantInline,]
 
 admin.site.register(Challenge, ChallengeAdmin)
