@@ -1,18 +1,29 @@
 from django.contrib import admin
+from django.forms import Textarea
+from django.db import models
 
-from .models import Challenge, Rule, Participant
+from .models import Challenge, Rule, Participant, ChallengeComment
 
 
-class RuleInline(admin.StackedInline):
+class RuleInline(admin.TabularInline):
 	model = Rule
+	formfield_overrides = {
+		models.TextField: { 'widget': Textarea(attrs={ 'rows': 2, 'cols': 40 }) }
+	}
 
-class ParticipantInline(admin.StackedInline):
+class ParticipantInline(admin.TabularInline):
 	model = Participant
 	readonly_fields = ('is_owner',)
 
+class ChallengeCommentInline(admin.TabularInline):
+	model = ChallengeComment
+	formfield_overrides = {
+		models.TextField: { 'widget': Textarea(attrs={ 'rows': 2, 'cols': 40 }) }
+	}
+
 class ChallengeAdmin(admin.ModelAdmin):
 	fields = ('name', 'duration', 'owner',)
-	inlines = [RuleInline, ParticipantInline,]
+	inlines = [RuleInline, ParticipantInline,ChallengeCommentInline]
 
 admin.site.register(Challenge, ChallengeAdmin)
 admin.site.register(Participant)

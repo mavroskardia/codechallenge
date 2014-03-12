@@ -2,8 +2,7 @@ from django import forms
 from django.forms import ModelForm
 from django.forms.models import inlineformset_factory
 
-from .models import Challenge
-from .models import Rule
+from .models import Challenge, Rule, ChallengeComment
 
 
 AddRuleFormset = inlineformset_factory(Challenge, Rule, can_delete=False, extra=0)
@@ -35,3 +34,17 @@ class ChallengeForm(ModelForm):
 			}))
 
 
+class ChallengeCommentForm(ModelForm):
+	class Meta:
+		model = ChallengeComment
+		fields = ('text',)
+
+	text = forms.CharField(
+		required=True,
+		widget=forms.Textarea(
+			attrs={
+			'placeholder': 'What is your comment?',
+			'rows': 2,
+			'cols': 40,
+			'class': 'form-control'
+			}))

@@ -71,8 +71,13 @@ class Participant(models.Model):
 class ChallengeComment(models.Model):
 	challenge = models.ForeignKey(Challenge)
 	coder = models.ForeignKey('coder.Coder')
-	date = models.DateField()
+	date = models.DateTimeField(default=lambda:timezone.now())
 	text = models.TextField()
 
+	def __unicode__(self):
+		return self.text[:40]
+
+	def __str__(self):
+		return self.__unicode__()
 
 

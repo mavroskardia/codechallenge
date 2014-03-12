@@ -7,6 +7,5 @@ from apps.coder.models import Coder
 
 def home(request):
 	return render(request, 'landing/home.html', {
-		'coders': Coder.objects.all(),
 		'challenges': Challenge.objects.all()
 		})

@@ -9,8 +9,8 @@ from django.contrib.auth.decorators import login_required
 from django.utils import timezone
 from django.utils.decorators import method_decorator
 
-from .models import Challenge, Participant, Rule
-from .forms import ChallengeForm, AddRuleFormset, AddRuleTemplateFormset
+from .models import Challenge, Participant, Rule, ChallengeComment
+from .forms import ChallengeForm, ChallengeCommentForm, AddRuleFormset, AddRuleTemplateFormset
 
 from apps.coder.models import Coder
 
@@ -27,11 +27,14 @@ class IndexView(generic.ListView):
 
 class DetailView(View):
     form_class = ChallengeForm
+    comment_form_class = ChallengeCommentForm
     template_name = 'challenge/challenge_detail.html'
 
     def get(self, request, pk, *args, **kwargs):
         challenge = get_object_or_404(Challenge, pk=pk)
-        return render(request, self.template_name, self.get_data(request, challenge))
+        data = self.get_data(request, challenge)
+        data['comment_form'] = self.comment_form_class()
+        return render(request, self.template_name, data)
 
     @method_decorator(login_required)
     def post(self, request, pk, *args, **kwargs):
@@ -54,11 +57,11 @@ class DetailView(View):
         data['now'] = timezone.now()
         data['challenge'] = challenge
 
-        if request.user.is_authenticated() and not request.user.is_anonymous() and Coder.objects.filter(user=request.user).exists():            
+        if request.user.is_authenticated() and not request.user.is_anonymous() and Coder.objects.filter(user=request.user).exists():
             data['challenges_im_in'] = Challenge.objects.filter(participant__coder=request.user.coder)
             data['is_owner'] = challenge.owner == request.user.coder
 
-            participant_query = challenge.participant_set.filter(coder=request.user.coder)            
+            participant_query = challenge.participant_set.filter(coder=request.user.coder)
             if participant_query.exists():
                 data['participant'] = participant_query[0]
 
@@ -151,3 +154,20 @@ class AddRuleTemplate(View):
         rule_formset.add_fields(formset, None)
 
         return render(request, self.template_name, { 'rule_formset': formset })
+
+class SubmitComment(View):
+    form_class = ChallengeCommentForm
+
+    @method_decorator(login_required)
+    def post(self, request, pk, *args, **kwargs):
+        comment = ChallengeComment(challenge_id=pk, coder=request.user.coder)
+        form = self.form_class(request.POST, instance=comment)
+
+        if form.is_valid():
+            form.save()
+            messages.info(request, 'Submitted comment (not really)')
+
+        else:
+            messages.warning(request, 'Can\'t submit an empty comment. You have been reported to the authorities.')
+
+        return HttpResponseRedirect(reverse('challenge:detail', args=(pk,)))

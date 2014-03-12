@@ -10,15 +10,6 @@
 		</ul>
 	</aside>
 
-	<aside class="pull-right">
-		<h4>Top Coders</h4>
-		<ul class="nav nav-stacked nav-pills">
-		{% for c in coders %}
-			<li><a href="{% url 'coder:profile' c.user.username %}">{{ c.webname }}</a></li>
-		{% endfor %}
-		</ul>
-	</aside>
-
 	<h2>
 		Welcome
 		<small>Sign up to be a coder, participate in challenges, earn experience points.</small>
