@@ -36,28 +36,13 @@ class DetailView(View):
         data['comment_form'] = self.comment_form_class()
         return render(request, self.template_name, data)
 
-    @method_decorator(login_required)
-    def post(self, request, pk, *args, **kwargs):
-        challenge = get_object_or_404(Challenge, pk=pk)
-
-        if (challenge.owner != request.user.coder):
-            messages.error(request, 'Can not update a challenge that you do not own.')
-        else:
-            form = self.form_class(request.POST, instance=challenge)
-            if form.is_valid():
-                form.save()
-                messages.info(request, 'Challenge updated.')
-            data = self.get_data(request, challenge)
-            data['form'] = form
-
-            return render(request, self.template_name, data)
-
     def get_data(self, request, challenge):
         data = { 'challenge': challenge }
         data['now'] = timezone.now()
         data['challenge'] = challenge
 
         if request.user.is_authenticated() and not request.user.is_anonymous() and Coder.objects.filter(user=request.user).exists():
+            data['form'] = self.form_class()
             data['challenges_im_in'] = Challenge.objects.filter(participant__coder=request.user.coder)
             data['is_owner'] = challenge.owner == request.user.coder
 
@@ -71,13 +56,13 @@ class UpdateView(View):
     @method_decorator(login_required)
     def post(self, request, pk, *args, **kwargs):
         challenge = get_object_or_404(Challenge, pk=pk)
-        if (challenge.owner != request.user.coder):
-            messages.error(request, 'Can not update a challenge that you do not own.')
-        else:
+
+        if (challenge.owner == request.user.coder):
             setattr(challenge, request.POST['name'], request.POST['value'])
             challenge.save()
-            messages.info(request, 'Challenge updated.')
-            return HttpResponse('done')
+            return HttpResponse('Challenge updated.')
+        else:
+            return HttpResponse('Can not update a challenge that you do not own.')
 
 class CreateView(View):
     form_class = ChallengeForm
@@ -92,12 +77,12 @@ class CreateView(View):
 
     @method_decorator(login_required)
     def post(self, request, *args, **kwargs):
-        form = self.form_class(request.POST)
+        challenge = Challenge(owner=request.user.coder)
+        form = self.form_class(request.POST, instance=challenge)
         rule_formset = AddRuleFormset(request.POST)
 
         if form.is_valid():
             challenge = form.save()
-            challenge.owner = request.user.coder
 
             # todo: move this to the Challenge clean() or save() method
             participant = Participant(coder=request.user.coder, challenge=challenge, is_owner=True)
