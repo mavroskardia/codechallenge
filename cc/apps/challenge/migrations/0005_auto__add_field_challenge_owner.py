@@ -13,7 +13,10 @@ class Migration(SchemaMigration):
         try:
             return Coder.objects.all()[0].id
         except:
-            return None
+            c = Coder()
+            c.user_id = 1
+            c.save()
+            return c
 
     def forwards(self, orm):
         # Adding field 'Challenge.owner'
