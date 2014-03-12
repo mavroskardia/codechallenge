@@ -69,16 +69,18 @@
 		</ul>
 	</section>
 
-	<section class="row">
+	<aside>
 		{% if participant %}
-		<h3>Comment on {{ challenge.name }}</h3>
-		<form action="{% url 'challenge:submit_comment' challenge.id %}" method="post">
-            {% csrf_token %}
-			<div class="form-group">
-				{{ comment_form.text }}
-			</div>
-			<button type="submit" class="btn btn-default">Submit</button>
-		</form>
+		<div class="row">
+			<h3>Comment on {{ challenge.name }}</h3>
+			<form action="{% url 'challenge:submit_comment' challenge.id %}" method="post">
+	            {% csrf_token %}
+				<div class="form-group col-md-5 col-lg-5">
+					{{ comment_form.text }}
+				</div>
+				<button type="submit" class="btn btn-default">Submit</button>
+			</form>
+		</div>
 		{% endif %}
 
 		<h4>Other Coder Comments</h4>
@@ -94,7 +96,7 @@
 			</dd>
 		{% endfor %}
 		</dl>
-	</section>
+	</aside>
 
 {% endblock %}
 
