@@ -14,7 +14,7 @@
 		<h4>Top Coders</h4>
 		<ul class="nav nav-stacked nav-pills">
 		{% for c in coders %}
-			<li><a href="{% url 'coder:profile' c.id %}">{{ c.webname }}</a></li>
+			<li><a href="{% url 'coder:profile' c.user.username %}">{{ c.webname }}</a></li>
 		{% endfor %}
 		</ul>
 	</aside>

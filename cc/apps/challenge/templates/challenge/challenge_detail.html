@@ -19,6 +19,7 @@
 			{% endif %}
 		</ul>
 	</aside>
+
 	<header>
 		<h1>
 			{% if is_owner %}
@@ -27,33 +28,44 @@
 			{% else %}
 				{{ challenge.name }}
 			{% endif %}
+			<small>
+				{% if user.is_authenticated %}
+					{% if participant %}
+					<a title="Leave this challenge" href="{% url 'challenge:leave' challenge.id %}"><i class="fa fa-sign-out"></i></a>
+					{% else %}
+					<a title="Join this challenge" href="{% url 'challenge:join' challenge.id %}"><i class="fa fa-ticket"></i></a>
+					{% endif %}
+				{% endif %}
+			</small>
+			<small>{{ challenge.duration }} day{{challenge.duration|pluralize}}</small>
 		</h1>
 	</header>
 
-	{% if user.is_authenticated %}
-		{% if participant %}
-		<a class="btn btn-primary btn-lg" href="{% url 'challenge:leave' challenge.id %}">Leave this challenge</a>
-		{% else %}
-		<a class="btn btn-primary btn-lg" href="{% url 'challenge:join' challenge.id %}">Join this challenge</a>
-		{% endif %}
-	{% endif %}
-
 	{% if challenge.partcipant_set.count > 0 %}
-	<h3>Coders on this challenge</h3>
-	<ul>
-		{% for participant in challenge.partcipant_set.all %}
-		<li><a href="{% url 'coder:profile' participant.coder.user.username %}">{{participant.coder.webname}}</a></li>
+	<section>
+		<h3>Coders on this challenge</h3>
+		<ul>
+			{% for participant in challenge.partcipant_set.all %}
+			<li><a href="{% url 'coder:profile' participant.coder.user.username %}">{{participant.coder.webname}}</a></li>
+			{% endfor %}
+		</ul>
+		{% endif %}
+	</section>
+
+	<section>
+		<h3>Rules</h3>
+
+		<ul>
+		{% for rule in challenge.rule_set.all %}
+			<li>{{ rule }}</li>
 		{% endfor %}
-	</ul>
-	{% endif %}
+		</ul>
+	</section>
 
-	<h3>Rules</h3>
+	<section>
+		<h3>Comments</h3>
 
-	<ul>
-	{% for rule in challenge.rule_set.all %}
-		<li>{{ rule }}</li>
-	{% endfor %}
-	</ul>
+	</section>
 
 {% endblock %}
 
@@ -68,7 +80,7 @@
 		
 		$input.show().focus().keydown(function(e) {
 			if (e.which == 13) {
-				
+
 				var postData = {
 					csrfmiddlewaretoken: '{{ csrf_token }}',
 					name: $(this).attr('rel'),
@@ -82,6 +94,8 @@
 			}
 		});
 	}
+
+	$('[title]').tooltip({delay:{show:1000,hide:0}});
 </script>
 
 {% endblock %}

@@ -10,21 +10,21 @@
 			{% endif %}
 		</h1>
 	</header>
-
-	<ul class="nav nav-pills nav-stacked">
-	{% for challenge in challenge_list %}
-		<li>
-			<a href="{% url 'challenge:detail' challenge.id %}">
-				{{ challenge.name }}
-				<span class="badge" title="Number of coders participating in this challenge">{{ challenge.participant_set.count }}</span>
-				{% if challenge in challenges_im_in %}
-				<span class="label label-success" title="You are participating in this challenge"><i class="fa fa-check"></i></span>
-				{% endif %}
-			</a>
-		</li>
-	{% endfor %}
-	</ul>
-
+	<div class="row">
+		<ul class="nav nav-pills pull-left nav-stacked">
+		{% for challenge in challenge_list %}
+			<li>
+				<a href="{% url 'challenge:detail' challenge.id %}">
+					{{ challenge.name }}
+					<span class="badge" title="Number of coders participating in this challenge">{{ challenge.participant_set.count }}</span>
+					{% if challenge in challenges_im_in %}
+					<span class="label label-success" title="You are participating in this challenge"><i class="fa fa-check"></i></span>
+					{% endif %}
+				</a>
+			</li>
+		{% endfor %}
+		</ul>
+	</div>
 {% endblock %}
 
 {% block extrascripts %}
