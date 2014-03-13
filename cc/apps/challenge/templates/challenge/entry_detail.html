@@ -1,0 +1,41 @@
+{% extends 'base.html' %}
+
+{% block contents %}
+
+	<header>
+		<h1>
+			{{ entry.name }}
+			<small>
+				Entry for
+				<a href="{% url 'challenge:detail' challenge.id %}">{{ challenge.name }}</a>
+			</small>
+		</h1>
+	</header>
+
+	<section>
+		<h3>About</h3>
+		<p>{{ entry.description }}</p>
+		<strong><a class="btn btn-lg btn-primary" href="#"><i class="fa fa-download"></i> Download {{ entry.name }}</a></strong>
+	</section>
+
+	<aside class="pull-right">
+		<h3>Screenshots</h3>
+		<ul class="screenshots nav nav-pills">
+		{% for ss in entry.entryscreenshot_set.all %}
+			<li>
+				<a href="{{ ss.pic.url }}" title="screenshot for {{ challenge.name }}">
+					<img src="{{ ss.pic.url }}" alt="screenshot for {{ challenge.name }}" />
+				</a>
+			</li>
+		{% endfor %}
+		</ul>
+	</aside>
+
+	<aside>
+		<h3>Comments</h3>
+		{% for c in entry.entrycomment_set.all %}
+		{{ c }}
+		{% endfor %}
+	</aside>
+
+{% endblock %}

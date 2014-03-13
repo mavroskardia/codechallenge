@@ -9,7 +9,7 @@ from django.contrib.auth.decorators import login_required
 from django.utils import timezone
 from django.utils.decorators import method_decorator
 
-from .models import Challenge, Participant, Rule, ChallengeComment
+from .models import Challenge, Participant, Rule, ChallengeComment, Entry
 from .forms import ChallengeForm, ChallengeCommentForm, AddRuleFormset, AddRuleTemplateFormset
 
 from apps.coder.models import Coder
@@ -151,9 +151,26 @@ class SubmitComment(View):
 
         if form.is_valid():
             form.save()
-            messages.info(request, 'Submitted comment (not really)')
+            messages.info(request, 'Submitted comment')
 
         else:
             messages.warning(request, 'Can\'t submit an empty comment. You have been reported to the authorities.')
 
         return HttpResponseRedirect(reverse('challenge:detail', args=(pk,)))
+
+class SubmitEntry(View):
+
+    def get(self, request, pk, *args, **kwargs):
+        messages.info('submitted entry (not really)')
+        return HttpResponseRedirect(reverse('challenge:detail', args=(pk,)))
+
+class EntryDetail(View):
+    template_name = 'challenge/entry_detail.html'
+
+    def get_data(self, pk, epk):
+        entry = get_object_or_404(Entry, pk=epk)
+        challenge = get_object_or_404(Challenge, pk=pk)
+        return { 'challenge': challenge, 'entry': entry }
+
+    def get(self, request, pk, epk, *args, **kwargs):
+        return render(request, self.template_name, self.get_data(pk, epk))

@@ -6,5 +6,6 @@ from apps.coder.views.index import IndexView
 
 urlpatterns = patterns('',
 	url(r'^$', IndexView.as_view(), name='index'),
+	url(r'^profile/(?P<pk>\d+)$', ProfileView.as_view(), name='profile'),
 	url(r'^profile/(?P<username>\w+)$', ProfileView.as_view(), name='profile'),
 )
