@@ -10,10 +10,10 @@
 			background-color: @gray-dark;
 			border: solid 1px @gray;
 			border-radius: @border-radius-base;
+			box-shadow: 3px 3px 10px rgba(0,0,0,0.15);
 			color: @gray-light;
 			padding: 1em;
 			font-size: 80%;
-			box-shadow: 3px 3px 10px rgba(0,0,0,0.15);
 			margin-bottom: 1em;
 		}
 
@@ -23,6 +23,12 @@
 		}
 
 		h3 { padding: 0; margin: 0 0 0.5em 0; }
+		hr { border-color: transparent; }
+
+		.challenge-comments {
+			.make-md-column(12);
+			.make-lg-column(12);
+		}
 
 		.screenshots {
 			a:hover { background-color: @gray; }
@@ -35,7 +41,18 @@
 		}
 
 		.entries {
+			.make-md-column(6);
+			.make-lg-column(6);
+
 			li { margin-top: 1em; }
+		}
+
+		#participant_info {
+			.make-lg-column(3);
+			.make-md-column(3);
+
+			vertical-align: top;
+			> * { vertical-align: top; }
 		}
 	}
 }
