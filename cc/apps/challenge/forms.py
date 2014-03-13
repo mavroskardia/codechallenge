@@ -45,6 +45,6 @@ class ChallengeCommentForm(ModelForm):
 			attrs={
 			'placeholder': 'What is your comment?',
 			'rows': 2,
-			'cols': 40,
+			'cols': 20,
 			'class': 'form-control'
 			}))

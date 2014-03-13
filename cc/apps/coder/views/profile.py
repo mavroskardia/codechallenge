@@ -15,8 +15,11 @@ class ProfileView(View):
     ro_template_name = 'coder/ro_profile.html'
     rw_template_name = 'coder/rw_profile.html'
 
-    def get(self, request, username, *args, **kwargs):
-        coder = get_object_or_404(Coder, user__username=username)
+    def get(self, request, pk=None, username=None, *args, **kwargs):
+        if pk:
+            coder = get_object_or_404(Coder, pk=pk)
+        elif username:
+            coder = get_object_or_404(Coder, user__username=username)
 
         if request.user == coder.user:
             return render(request, self.rw_template_name, { 'coder': coder, 'form': self.form_class(instance=coder) })

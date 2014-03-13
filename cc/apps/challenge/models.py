@@ -81,3 +81,41 @@ class ChallengeComment(models.Model):
 		return self.__unicode__()
 
 
+class Entry(models.Model):
+	challenge = models.ForeignKey(Challenge)
+	participant = models.ForeignKey(Participant)
+	name = models.CharField(max_length=256)
+	description = models.TextField()
+	date = models.DateTimeField(default=lambda:timezone.now())
+	thefile = models.FileField(upload_to='entries')
+
+	def __unicode__(self):
+		return '%s\'s entry for %s on %s' % (self.participant, self.participant.challenge, self.date)
+
+	def __str__(self):
+		return self.__unicode__()
+
+	class Meta:
+		verbose_name_plural = 'entries'
+
+class EntryComment(models.Model):
+	entry = models.ForeignKey(Entry)
+	coder = models.ForeignKey('coder.Coder')
+	date = models.DateTimeField(default=lambda:timezone.now())
+	text = models.TextField()
+
+	def __unicode__(self):
+		return self.text[:40]
+
+	def __str__(self):
+		return self.__unicode__()
+
+class EntryScreenshot(models.Model):
+	entry = models.ForeignKey(Entry)
+	pic = models.ImageField(upload_to='entry_screenshots')
+
+	def __unicode__(self):
+		return 'screenshot for %s' % self.entry
+
+	def __str__(self):
+		return self.__unicode__()
