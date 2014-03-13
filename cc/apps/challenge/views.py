@@ -10,7 +10,7 @@ from django.utils import timezone
 from django.utils.decorators import method_decorator
 
 from .models import Challenge, Participant, Rule, ChallengeComment, Entry
-from .forms import ChallengeForm, ChallengeCommentForm, AddRuleFormset, AddRuleTemplateFormset
+from .forms import ChallengeForm, ChallengeCommentForm, AddRuleFormset, AddRuleTemplateFormset, SubmitEntryForm
 
 from apps.coder.models import Coder
 
@@ -152,17 +152,33 @@ class SubmitComment(View):
         if form.is_valid():
             form.save()
             messages.info(request, 'Submitted comment')
-
         else:
             messages.warning(request, 'Can\'t submit an empty comment. You have been reported to the authorities.')
 
         return HttpResponseRedirect(reverse('challenge:detail', args=(pk,)))
 
 class SubmitEntry(View):
+    template_name = 'challenge/submit_entry.html'
+    form_class = SubmitEntryForm
 
     def get(self, request, pk, *args, **kwargs):
-        messages.info('submitted entry (not really)')
-        return HttpResponseRedirect(reverse('challenge:detail', args=(pk,)))
+        form = self.form_class()
+        challenge = get_object_or_404(Challenge, pk=pk)
+        return render(request, self.template_name, { 'form': form, 'challenge': challenge })
+
+    def post(self, request, pk, *args, **kwargs):
+        form = self.form_class(request.POST, request.FILES)
+        challenge = get_object_or_404(Challenge, pk=pk)
+
+        if form.is_valid():
+            entry = form.save(commit=False)
+            entry.challenge = challenge
+            entry.participant = challenge.participant_set.get(coder__user=request.user)
+            entry.save()
+            messages.info(request, 'Submitted your entry!')
+            return HttpResponseRedirect(reverse('challenge:detail', args=(pk,)))
+
+        return render(request, self.template_name, { 'form': form, 'challenge': challenge })
 
 class EntryDetail(View):
     template_name = 'challenge/entry_detail.html'

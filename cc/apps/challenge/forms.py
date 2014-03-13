@@ -2,7 +2,7 @@ from django import forms
 from django.forms import ModelForm
 from django.forms.models import inlineformset_factory
 
-from .models import Challenge, Rule, ChallengeComment
+from .models import Challenge, Rule, ChallengeComment, Entry
 
 
 AddRuleFormset = inlineformset_factory(Challenge, Rule, can_delete=False, extra=0)
@@ -48,3 +48,27 @@ class ChallengeCommentForm(ModelForm):
 			'cols': 20,
 			'class': 'form-control'
 			}))
+
+
+class SubmitEntryForm(ModelForm):
+	class Meta:
+		model = Entry
+		fields = ('name', 'description', 'thefile', )
+
+	name = forms.CharField(
+		required=True,
+		widget=forms.TextInput(
+			attrs={
+			'class': 'form-control',
+			'placeholder': 'Name of your entry'
+		}))
+
+	description = forms.CharField(
+		required=True,
+		widget=forms.Textarea(
+			attrs={
+			'class': 'form-control',
+			'rows': 2,
+			'cols': 20,
+			'placeholder': 'Describe your entry'
+		}))

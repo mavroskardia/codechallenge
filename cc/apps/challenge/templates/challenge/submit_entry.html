@@ -1,0 +1,23 @@
+{% extends 'base.html' %}
+
+{% block contents %}
+	<h1>
+		Submit entry
+		<small>for <a href="{% url 'challenge:detail' challenge.id %}">{{ challenge.name }}</a></small>
+	</h1>
+
+	<section class="col-md-5 col-lg-5">
+		<form action="{% url 'challenge:submit_entry' challenge.id %}" method="post" enctype="multipart/form-data">
+			{% csrf_token %}
+			{% for field in form %}
+			<div class="form-group">
+				{{ field.label }}
+				{{ field }}
+				{{ field.errors }}
+			</div>
+			{% endfor %}
+			<button type="submit" class="btn btn-primary btn-lg">Submit</button>
+		</form>
+	</section>
+
+{% endblock %}

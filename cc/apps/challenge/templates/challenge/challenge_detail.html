@@ -100,11 +100,14 @@
 			{% endif %}
 		</aside>
 
-		<aside class="pull-right col-md-6 col-lg-6">
+		<aside class="pull-right col-md-6 col-lg-6 entries">
 			<h3>Entries</h3>
-			<ul class="list-unstyled row">
+			{% if participant %}
+			<a class="btn btn-primary" href="{% url 'challenge:submit_entry' challenge.id %}">Submit your entry</a>
+			{% endif %}
+			<ul class="list-unstyled">
 			{% for e in challenge.entry_set.all %}
-				<li>
+				<li class="row">
 					<div class="col-md-2 col-lg-2">
 						<img src="http://placehold.it/50x50" alt="mini-screenshot of entry" />
 					</div>
