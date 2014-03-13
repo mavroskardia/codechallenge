@@ -55,15 +55,22 @@
 	<section>
 		<h3>
 			Rules
-			<a href="#"><i class="fa fa-plus-circle"></i></a>
+			{% if is_owner %}
+			<a href="#" onclick="AddRule();"><i class="fa fa-plus-circle"></i></a>
+			{% endif %}
 		</h3>
 
-		<ul>
+		<ul data-rule-list>
 		{% for rule in challenge.rule_set.all %}
 			<li>
-				{{ rule }}
-				<a title="Edit Rule" href="#"><i class="fa fa-pencil"></i></a>
-				<a title="Delete Rule" href="#"><i class="fa fa-times"></i></a>
+				{% if is_owner %}
+					<span data-span>{{ rule }}</span>
+					<input data-input type="text" rel="description" value="{{ rule.description }}" style="display:none;" onkeydown="UpdateRule(this);"/>
+					<a title="Edit Rule" href="#" onclick="EditRule(this);"><i class="fa fa-pencil"></i></a>
+					<a title="Delete Rule" href="#"><i class="fa fa-times"></i></a>
+				{% else %}
+					{{ rule }}
+				{% endif %}
 			</li>
 		{% endfor %}
 		</ul>
@@ -116,10 +123,37 @@
 				};
 
 				$.post('/challenge/{{ challenge.id }}/update', postData, function(data) {
-					console.log(data);
+					$elt.show().text($input.val());
+					$input.hide();
 				});
 			}
+			else if (e.which == 27) {
+				$elt.show();
+				$input.hide();
+			}
 		});
+	}
+
+	function AddRule() {
+		$('[data-rule-list]').append('<li>Test</li>');
+	}
+
+	function EditRule(elt) {
+		var $elt = $(elt);
+
+		var $span = $elt.siblings('[data-span]');
+		var $input = $elt.siblings('[data-input]');
+
+		$span.hide();
+		$input.show().focus();
+	}
+
+	function UpdateRule(e, elt) {
+		console.log(e.which);
+		// var $input = $(elt);
+		// var $span = $input.siblings('[data-span]');
+
+		// $span.text($input.val());
 	}
 
 	$('[title]').tooltip({delay:{show:1000,hide:0}});
