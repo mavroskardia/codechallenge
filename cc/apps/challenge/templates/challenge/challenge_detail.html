@@ -23,7 +23,7 @@
 	<header>
 		<h1>
 			{% if is_owner %}
-				<span onclick="Edit(this);">{{ challenge.name }}</span>
+				<span data-challenge-name onclick="MakeEditable(this);">{{ challenge.name }}</span>
 				<input data-input type="text" rel="name" value="{{ challenge.name }}" style="display:none;" />
 			{% else %}
 				{{ challenge.name }}
@@ -37,7 +37,15 @@
 					{% endif %}
 				{% endif %}
 			</small>
-			<small>{{ challenge.duration }} day{{challenge.duration|pluralize}}</small>
+			<small>
+			{% if is_owner %}
+				<span data-challenge-duration onclick="MakeEditable(this);">{{ challenge.duration }}</span>
+				<input data-input type="text" rel="duration" value="{{ challenge.duration }}" style="display:none;" />
+				 day{{challenge.duration|pluralize}}
+			{% else %}
+				{{ challenge.duration }} day{{challenge.duration|pluralize}}
+			{% endif %}
+			</small>
 		</h1>
 	</header>
 
@@ -62,12 +70,12 @@
 
 		<ul data-rule-list>
 		{% for rule in challenge.rule_set.all %}
-			<li>
+			<li data-rule-container>
 				{% if is_owner %}
 					<span data-span>{{ rule }}</span>
-					<input data-input type="text" rel="description" value="{{ rule.description }}" style="display:none;" onkeydown="UpdateRule(this);"/>
-					<a title="Edit Rule" href="#" onclick="EditRule(this);"><i class="fa fa-pencil"></i></a>
-					<a title="Delete Rule" href="#"><i class="fa fa-times"></i></a>
+					<input data-input type="text" rel="description" value="{{ rule.description }}" style="display:none;" />
+					<a title="Edit Rule" href="#" onclick="MakeRuleEditable(this, {{ rule.id }});"><i class="fa fa-pencil"></i></a>
+					<a title="Delete Rule" href="#" onclick="DeleteRule(this, {{ rule.id }});"><i class="fa fa-times"></i></a>
 				{% else %}
 					{{ rule }}
 				{% endif %}
@@ -80,7 +88,7 @@
 
 		<aside class="pull-left col-md-5 col-lg-5">
 			{% if can_comment %}
-				<h3>Comment on {{ challenge.name }}</h3>
+				<h3>Comment on <span data-challenge-name>{{ challenge.name }}</span></h3>
 				<form action="{% url 'challenge:submit_comment' challenge.id %}" method="post">
 		            {% csrf_token %}
 					<div class="form-group">
@@ -131,52 +139,86 @@
 {% block extrascripts %}
 
 <script type="text/javascript">
-	function Edit(elt) {
-		var $elt = $(elt);
-		$elt.hide();
+	var KEY_ENTER = 13,
+		KEY_ESCAPE = 27;
 
-		var $input = $elt.siblings('[data-input]');
-		$input.show().focus().keydown(function(e) {
-			if (e.which == 13) {
+	function MakeEditable(span) {
+		var $span = $(span);
 
-				var postData = {
-					csrfmiddlewaretoken: '{{ csrf_token }}',
-					name: $(this).attr('rel'),
-					value: $(this).val()
-				};
+		$span.hide();
+		$span.siblings('[data-input]')
+			.show()
+			.keydown(function(e) { UpdateChallenge(e, $span, $(this)); })
+			.focus();
+	}
 
-				$.post('/challenge/{{ challenge.id }}/update', postData, function(data) {
-					$elt.show().text($input.val());
-					$input.hide();
-				});
-			}
-			else if (e.which == 27) {
-				$elt.show();
+	function UpdateChallenge(e, $span, $input) {
+		if (e.which == KEY_ENTER) {
+			
+			var rel = $input.attr('rel'),
+				val = $input.val();
+
+			var postData = {
+				csrfmiddlewaretoken: '{{ csrf_token }}',
+				name: rel,
+				value: val
+			};
+
+			$.post('/challenge/{{ challenge.id }}/update', postData, function(data) {
+				$('[data-challenge-' + rel + ']').text(val).show();
 				$input.hide();
-			}
-		});
+			});
+		}
+		else if (e.which == KEY_ESCAPE) {
+			$span.show();
+			$input.hide();
+		}
+	}
+
+	function MakeRuleEditable(a, rule_id) {
+		var $span = $(a).siblings('[data-span]');
+
+		$span.hide();
+		$span.siblings('[data-input]')
+			.show()
+			.keydown(function(e) { UpdateRule(e, $span, $(this), rule_id); })
+			.focus();
 	}
 
 	function AddRule() {
 		$('[data-rule-list]').append('<li>Test</li>');
 	}
 
-	function EditRule(elt) {
-		var $elt = $(elt);
-
-		var $span = $elt.siblings('[data-span]');
-		var $input = $elt.siblings('[data-input]');
-
-		$span.hide();
-		$input.show().focus();
+	function DeleteRule(a, rule_id) {
+		var postData = { csrfmiddlewaretoken: '{{ csrf_token }}' };
+		
+		$.post('/challenge/' + rule_id + '/delete_rule', postData, function(data) {
+			if (data == 'yay')
+				$(a).parents('[data-rule-container]').remove();
+		});
 	}
 
-	function UpdateRule(e, elt) {
-		console.log(e.which);
-		// var $input = $(elt);
-		// var $span = $input.siblings('[data-span]');
+	function UpdateRule(e, $span, $input, rule_id) {
+		if (e.which == KEY_ENTER) {
+			
+			var rel = $input.attr('rel'),
+				val = $input.val();
 
-		// $span.text($input.val());
+			var postData = {
+				csrfmiddlewaretoken: '{{ csrf_token }}',
+				name: rel,
+				value: val
+			};
+
+			$.post('/challenge/' + rule_id + '/update_rule', postData, function(data) {
+				$span.text(val).show();
+				$input.hide();
+			});
+		}
+		else if (e.which == KEY_ESCAPE) {
+			$span.show();
+			$input.hide();
+		}
 	}
 
 	$('[title]').tooltip({delay:{show:1000,hide:0}});
