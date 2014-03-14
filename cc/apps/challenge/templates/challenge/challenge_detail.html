@@ -6,7 +6,7 @@
 		<h1>
 			{% if is_owner %}
 				<span data-challenge-name onclick="MakeEditable(this);">{{ challenge.name }}</span>
-				<input data-input type="text" rel="name" value="{{ challenge.name }}" style="display:none;" />
+				<input data-input type="text" class="form-control" rel="name" value="{{ challenge.name }}" style="display:none;" />
 			{% else %}
 				{{ challenge.name }}
 			{% endif %}
@@ -22,7 +22,7 @@
 			<small>
 			{% if is_owner %}
 				<span data-challenge-duration onclick="MakeEditable(this);">{{ challenge.duration }}</span>
-				<input data-input type="text" rel="duration" value="{{ challenge.duration }}" style="display:none;" />
+				<input data-input type="text" class="form-control" rel="duration" value="{{ challenge.duration }}" style="display:none;" />
 				 day{{challenge.duration|pluralize}}
 			{% else %}
 				{{ challenge.duration }} day{{challenge.duration|pluralize}}
