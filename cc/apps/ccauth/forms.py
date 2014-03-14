@@ -9,9 +9,9 @@ class LoginForm(forms.Form):
 class RegistrationForm(forms.Form):
 	username = forms.CharField(max_length=255, widget=forms.TextInput(attrs={'placeholder':'Your name','class':'form-control'}))
 	password = forms.CharField(widget=forms.PasswordInput(attrs={'placeholder':'Your password','class':'form-control'}))
-	confirmpassword = forms.CharField(widget=forms.PasswordInput(attrs={'placeholder':'Confirm your password','class':'form-control'}))
+	confirmpassword = forms.CharField(label='Confirm Password', widget=forms.PasswordInput(attrs={'placeholder':'Confirm your password','class':'form-control'}))
 	email = forms.EmailField(widget=forms.TextInput(attrs={'placeholder':'Your email address','class':'form-control'}))
-	confirmemail = forms.EmailField(widget=forms.TextInput(attrs={'placeholder':'Confirm your email address','class':'form-control'}))
+	confirmemail = forms.EmailField(label='Confirm Email', widget=forms.TextInput(attrs={'placeholder':'Confirm your email address','class':'form-control'}))
 
 	def clean(self):
 		cleaned_data = super(RegistrationForm, self).clean()

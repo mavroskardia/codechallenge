@@ -5,7 +5,7 @@
 	<header>
 		<h1>
 			{% if is_owner %}
-				<span onclick="Edit(this);">{{ challenge.name }}</span>
+				<span data-challenge-name onclick="MakeEditable(this);">{{ challenge.name }}</span>
 				<input data-input type="text" rel="name" value="{{ challenge.name }}" style="display:none;" />
 			{% else %}
 				{{ challenge.name }}
@@ -19,7 +19,15 @@
 					{% endif %}
 				{% endif %}
 			</small>
-			<small>{{ challenge.duration }} day{{challenge.duration|pluralize}}</small>
+			<small>
+			{% if is_owner %}
+				<span data-challenge-duration onclick="MakeEditable(this);">{{ challenge.duration }}</span>
+				<input data-input type="text" rel="duration" value="{{ challenge.duration }}" style="display:none;" />
+				 day{{challenge.duration|pluralize}}
+			{% else %}
+				{{ challenge.duration }} day{{challenge.duration|pluralize}}
+			{% endif %}
+			</small>
 		</h1>
 	</header>
 
@@ -38,25 +46,86 @@
 {% block extrascripts %}
 
 <script type="text/javascript">
-	function Edit(elt) {
-		var $elt = $(elt);
-		$elt.hide();
+	var KEY_ENTER = 13,
+		KEY_ESCAPE = 27;
 
-		var $input = $elt.siblings('[data-input]');
-		$input.show().focus().keydown(function(e) {
-			if (e.which == 13) {
+	function MakeEditable(span) {
+		var $span = $(span);
 
-				var postData = {
-					csrfmiddlewaretoken: '{{ csrf_token }}',
-					name: $(this).attr('rel'),
-					value: $(this).val()
-				};
+		$span.hide();
+		$span.siblings('[data-input]')
+			.show()
+			.keydown(function(e) { UpdateChallenge(e, $span, $(this)); })
+			.focus();
+	}
 
-				$.post('/challenge/{{ challenge.id }}/update', postData, function(data) {
-					console.log(data);
-				});
-			}
+	function UpdateChallenge(e, $span, $input) {
+		if (e.which == KEY_ENTER) {
+
+			var rel = $input.attr('rel'),
+				val = $input.val();
+
+			var postData = {
+				csrfmiddlewaretoken: '{{ csrf_token }}',
+				name: rel,
+				value: val
+			};
+
+			$.post('/challenge/{{ challenge.id }}/update', postData, function(data) {
+				$('[data-challenge-' + rel + ']').text(val).show();
+				$input.hide();
+			});
+		}
+		else if (e.which == KEY_ESCAPE) {
+			$span.show();
+			$input.hide();
+		}
+	}
+
+	function MakeRuleEditable(a, rule_id) {
+		var $span = $(a).parents('[data-rule-container]').find('[data-span]');
+
+		$span.hide();
+		$span.siblings('[data-input]')
+			.show()
+			.keydown(function(e) { UpdateRule(e, $span, $(this), rule_id); })
+			.focus();
+	}
+
+	function AddRule() {
+		$('[data-rule-list]').append('<li>Test</li>');
+	}
+
+	function DeleteRule(a, rule_id) {
+		var postData = { csrfmiddlewaretoken: '{{ csrf_token }}' };
+
+		$.post('/challenge/' + rule_id + '/delete_rule', postData, function(data) {
+			if (data == 'yay')
+				$(a).parents('[data-rule-container]').remove();
 		});
+	}
+
+	function UpdateRule(e, $span, $input, rule_id) {
+		if (e.which == KEY_ENTER) {
+
+			var rel = $input.attr('rel'),
+				val = $input.val();
+
+			var postData = {
+				csrfmiddlewaretoken: '{{ csrf_token }}',
+				name: rel,
+				value: val
+			};
+
+			$.post('/challenge/' + rule_id + '/update_rule', postData, function(data) {
+				$span.text(val).show();
+				$input.hide();
+			});
+		}
+		else if (e.which == KEY_ESCAPE) {
+			$span.show();
+			$input.hide();
+		}
 	}
 
 	$('[title]').tooltip({delay:{show:1000,hide:0}});

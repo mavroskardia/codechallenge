@@ -65,6 +65,29 @@ class UpdateView(View):
         else:
             return HttpResponse('Can not update a challenge that you do not own.')
 
+class UpdateRuleView(View):
+    @method_decorator(login_required)
+    def post(self, request, pk, *args, **kwargs):
+        rule = get_object_or_404(Rule, pk=pk)
+
+        if (rule.challenge.owner == request.user.coder):
+            setattr(rule, request.POST['name'], request.POST['value'])
+            rule.save()
+            return HttpResponse('Rule updated.')
+        else:
+            return HttpResponse('Can not update a rule for a challenge that you do not own.')
+
+class DeleteRuleView(View):
+    @method_decorator(login_required)
+    def post(self, request, pk, *args, **kwargs):
+        rule = get_object_or_404(Rule, pk=pk)
+
+        if (rule.challenge.owner == request.user.coder):
+            rule.delete()
+            return HttpResponse('yay')
+        else:
+            return HttpResponse('Can not delete a rule for a challenge that you do not own.')
+
 class CreateView(View):
     form_class = ChallengeForm
     template_name = 'challenge/challenge_create.html'

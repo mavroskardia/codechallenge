@@ -1,4 +1,5 @@
 ve
+venv
 db.sqlite3
 *.log
 *.pot
