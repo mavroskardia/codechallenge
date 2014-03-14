@@ -10,7 +10,7 @@ from django.utils import timezone
 from django.utils.decorators import method_decorator
 
 from .models import Challenge, Participant, Rule, ChallengeComment, Entry
-from .forms import ChallengeForm, ChallengeCommentForm, AddRuleFormset, AddRuleTemplateFormset, SubmitEntryForm
+from .forms import ChallengeForm, ChallengeCommentForm, AddRuleFormset, AddRuleTemplateFormset, SubmitEntryForm, SubmitEntryCommentForm
 
 from apps.coder.models import Coder
 
@@ -137,9 +137,10 @@ class AddRuleTemplate(View):
             prefix=rule_formset.add_prefix(rule_count),
             empty_permitted=True,
         )
+
         rule_formset.add_fields(formset, None)
 
-        return render(request, self.template_name, { 'rule_formset': formset })
+        return render(request, self.template_name, { 'rule_formset': formset, 'rule_count': rule_count })
 
 class SubmitComment(View):
     form_class = ChallengeCommentForm
@@ -182,11 +183,31 @@ class SubmitEntry(View):
 
 class EntryDetail(View):
     template_name = 'challenge/entry_detail.html'
+    comment_form = SubmitEntryCommentForm
 
-    def get_data(self, pk, epk):
+    def get_data(self, request, pk, epk):
         entry = get_object_or_404(Entry, pk=epk)
         challenge = get_object_or_404(Challenge, pk=pk)
-        return { 'challenge': challenge, 'entry': entry }
+        can_comment = Coder.objects.filter(user=request.user).exists()
+        return { 'challenge': challenge, 'entry': entry, 'can_comment': can_comment, 'comment_form': self.comment_form() }
 
     def get(self, request, pk, epk, *args, **kwargs):
-        return render(request, self.template_name, self.get_data(pk, epk))
+        return render(request, self.template_name, self.get_data(request, pk, epk))
+
+class SubmitEntryComment(View):
+    form_class = SubmitEntryCommentForm
+
+    @method_decorator(login_required)
+    def post(self, request, pk, epk, *args, **kwargs):
+        form = self.form_class(request.POST)
+
+        if form.is_valid():
+            comment = form.save(commit=False)
+            comment.entry_id = epk
+            comment.coder = request.user.coder
+            comment.save()
+            messages.info(request, 'Successfully commented')
+        else:
+            messages.warning(request, 'Can\'t submit an empty comment. You have been reported to the authorities.')
+
+        return HttpResponseRedirect(reverse('challenge:entry', args=(pk, epk,)))

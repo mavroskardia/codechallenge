@@ -15,7 +15,7 @@
 	<section>
 		<h3>About</h3>
 		<p>{{ entry.description }}</p>
-		<strong><a class="btn btn-lg btn-primary" href="#"><i class="fa fa-download"></i> Download {{ entry.name }}</a></strong>
+		<strong><a class="btn btn-lg btn-primary" href="{{ entry.thefile.url }}"><i class="fa fa-download"></i> Download {{ entry.name }}</a></strong>
 	</section>
 
 	<aside class="pull-right">
@@ -31,11 +31,6 @@
 		</ul>
 	</aside>
 
-	<aside>
-		<h3>Comments</h3>
-		{% for c in entry.entrycomment_set.all %}
-		{{ c }}
-		{% endfor %}
-	</aside>
+	{% include 'challenge/entry_comments.html' with challenge=challenge entry=entry can_comment=can_comment comment_form=comment_form %}
 
 {% endblock %}

@@ -12,6 +12,7 @@ urlpatterns = patterns('',
 	url(r'^(?P<pk>\d+)/submit_comment$', views.SubmitComment.as_view(), name='submit_comment'),
 	url(r'^(?P<pk>\d+)/submit_entry$', views.SubmitEntry.as_view(), name='submit_entry'),
 	url(r'^(?P<pk>\d+)/entry/(?P<epk>\d+)$', views.EntryDetail.as_view(), name='entry'),
+	url(r'^(?P<pk>\d+)/entry/(?P<epk>\d+)/submit_comment$', views.SubmitEntryComment.as_view(), name='submit_entry_comment'),
 	url(r'^create/$', views.CreateView.as_view(), name='create'),
 	url(r'^add_rule_template/(?P<rule_count>\d+)$', views.AddRuleTemplate.as_view(), name='add_rule_template'),
 )

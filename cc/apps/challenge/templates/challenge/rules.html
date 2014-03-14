@@ -1,0 +1,16 @@
+	<section class="pull-left col-md-6 col-lg-6">
+		<h3>
+			Rules
+			<a href="#"><i class="fa fa-plus-circle"></i></a>
+		</h3>
+
+		<ol>
+		{% for rule in challenge.rule_set.all %}
+			<li>
+				{{ rule.description }}
+				<a title="Edit Rule" href="#"><i class="fa fa-pencil"></i></a>
+				<a title="Delete Rule" href="#"><i class="fa fa-times"></i></a>
+			</li>
+		{% endfor %}
+		</ol>
+	</section>

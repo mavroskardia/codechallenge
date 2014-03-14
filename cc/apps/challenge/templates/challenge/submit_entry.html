@@ -6,6 +6,8 @@
 		<small>for <a href="{% url 'challenge:detail' challenge.id %}">{{ challenge.name }}</a></small>
 	</h1>
 
+	<p>You'll be able to add screenshots and comments after the entry is submitted.</p>
+
 	<section class="col-md-5 col-lg-5">
 		<form action="{% url 'challenge:submit_entry' challenge.id %}" method="post" enctype="multipart/form-data">
 			{% csrf_token %}

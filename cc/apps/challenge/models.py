@@ -87,7 +87,7 @@ class Entry(models.Model):
 	name = models.CharField(max_length=256)
 	description = models.TextField()
 	date = models.DateTimeField(default=lambda:timezone.now())
-	thefile = models.FileField(upload_to='entries')
+	thefile = models.FileField(upload_to='entries', verbose_name='File')
 
 	def __unicode__(self):
 		return '%s\'s entry for %s on %s' % (self.participant, self.participant.challenge, self.date)

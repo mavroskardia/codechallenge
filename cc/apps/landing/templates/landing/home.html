@@ -4,7 +4,7 @@
 	<aside class="pull-right">
 		<h4>Recent Challenges</h4>
 		<ul class="nav nav-stacked nav-pills">
-		{% for c in challenges %}
+		{% for c in recent_challenges %}
 			<li><a href="{% url 'challenge:detail' c.id %}">{{ c.name }}</a></li>
 		{% endfor %}
 		</ul>

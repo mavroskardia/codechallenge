@@ -2,11 +2,8 @@ from django import forms
 from django.forms import ModelForm
 from django.forms.models import inlineformset_factory
 
-from .models import Challenge, Rule, ChallengeComment, Entry
+from .models import Challenge, Rule, ChallengeComment, Entry, EntryComment
 
-
-AddRuleFormset = inlineformset_factory(Challenge, Rule, can_delete=False, extra=0)
-AddRuleTemplateFormset = inlineformset_factory(Challenge, Rule, can_delete=False, extra=1)
 
 class ChallengeForm(ModelForm):
 	class Meta:
@@ -32,6 +29,22 @@ class ChallengeForm(ModelForm):
 			'size': 5,
 			'class': 'form-control'
 			}))
+
+
+class RuleForm(ModelForm):
+	class Meta:
+		model = Rule
+		fields = ('description', )
+
+	description = forms.CharField(
+		required=True,
+		widget=forms.Textarea(
+			attrs={
+			'class': 'form-control',
+			'rows': 2,
+			'cols': 20,
+			'placeholder': 'Describe this rule'
+		}))
 
 
 class ChallengeCommentForm(ModelForm):
@@ -72,3 +85,21 @@ class SubmitEntryForm(ModelForm):
 			'cols': 20,
 			'placeholder': 'Describe your entry'
 		}))
+
+class SubmitEntryCommentForm(ModelForm):
+	class Meta:
+		model = EntryComment
+		fields = ('text',)
+
+	text = forms.CharField(
+		required=True,
+		widget=forms.Textarea(
+			attrs={
+			'placeholder': 'What is your comment?',
+			'rows': 2,
+			'cols': 20,
+			'class': 'form-control'
+			}))
+
+AddRuleFormset = inlineformset_factory(Challenge, Rule, can_delete=False, extra=0)
+AddRuleTemplateFormset = inlineformset_factory(Challenge, Rule, form=RuleForm, can_delete=False, extra=1)

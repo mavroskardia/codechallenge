@@ -2,24 +2,6 @@
 
 {% block contents %}
 
-	<aside id="participant_info" class="pull-right">
-		<h3>Stats</h3>
-		<ul class="list-unstyled">
-			<li>{{ challenge.owner.webname }} is the owner.</li>
-			{% if participant %}
-			<li>You've been working on this challenge since <strong>{{ participant.date_joined }}</strong></li>
-			<li>This challenge ends for you on <strong>{{ participant.end_date }}</strong></li>
-			<li>
-				<div class="progress">
-					<div class="progress-bar" role="progressbar" aria-valuenow="" aria-valuemin="0" aria-valuemax="100" style="width: {{ participant.percent_complete }}%">
-						<span>{{ participant.days_left|floatformat:2 }} days left</span>
-					</div>
-				</div>
-			</li>
-			{% endif %}
-		</ul>
-	</aside>
-
 	<header>
 		<h1>
 			{% if is_owner %}
@@ -41,87 +23,15 @@
 		</h1>
 	</header>
 
-	<div class="row">
-		<section class="col-md-6 col-lg-6">
-			{% if challenge.participant_set.count > 0 %}
-			<h3>{{ challenge.participant_set.count }} Coder{{ challenge.participant_set.count|pluralize }} on this challenge</h3>
-			<ul>
-				{% for participant in challenge.participant_set.all %}
-				<li><a href="{% url 'coder:profile' participant.coder.user.username %}">{{participant.coder.webname}}</a></li>
-				{% endfor %}
-			</ul>
-			{% else %}
-			<a title="Join this challenge" class="btn btn-lg btn-primary" href="{% url 'challenge:join' challenge.id %}">Join Challenge</a>
-			{% endif %}
-		</section>
-	</div>
+	{% include 'challenge/stats.html' with challenge=challenge participant=participant %}
 
-	<section class="col-md-6 col-lg-6">
-		<h3>
-			Rules
-			<a href="#"><i class="fa fa-plus-circle"></i></a>
-		</h3>
+	{% include 'challenge/participants.html' with challenge=challenge %}
 
-		<ol>
-		{% for rule in challenge.rule_set.all %}
-			<li>
-				{{ rule.description }}
-				<a title="Edit Rule" href="#"><i class="fa fa-pencil"></i></a>
-				<a title="Delete Rule" href="#"><i class="fa fa-times"></i></a>
-			</li>
-		{% endfor %}
-		</ol>
-	</section>
+	{% include 'challenge/rules.html' with challenge=challenge %}
 
-	<aside class="pull-right entries">
-		<h3>Entries</h3>
-		{% if participant %}
-		<a class="btn btn-primary" href="{% url 'challenge:submit_entry' challenge.id %}">Submit your entry</a>
-		{% endif %}
-		<ul class="list-unstyled">
-		{% for e in challenge.entry_set.all %}
-			<li class="row">
-				<div class="col-md-2 col-lg-2">
-					<img src="http://placehold.it/50x50" alt="mini-screenshot of entry" />
-				</div>
-				<div class="col-md-10 col-lg-10">
-					<strong><a href="{% url 'challenge:entry' challenge.id e.id %}">{{ e.name }}</a></strong>
-					<p>submitted by <a href="{% url 'coder:profile' e.participant.coder.id %}">{{ e.participant.coder.webname }}</a> on {{ e.date|date:'Y.m.d H:G' }}</p>
-				</div>
-			</li>
-		{% endfor %}
-		</ul>
-	</aside>
+	{% include 'challenge/entries.html' with challenge=challenge participant=participant %}
 
-	<section class="challenge-comments">
-		{% if can_comment %}
-			<h3>Comment on {{ challenge.name }}</h3>
-			<form class="row" action="{% url 'challenge:submit_comment' challenge.id %}" method="post">
-	            {% csrf_token %}
-				<div class="form-group col-md-5 col-lg-5">
-					{{ comment_form.text }}
-				</div>
-				<button type="submit" class="btn btn-default">Submit</button>
-			</form>
-		{% endif %}
-
-		{% if challenge.challengecomment_set.count %}
-		<aside>
-			<h4>Comments</h4>
-			<dl class="dl-horizontal">
-			{% for comment in challenge.challengecomment_set.all %}
-				<dt>
-					<strong><a href="{% url 'coder:profile' comment.coder.user.username %}">{{ comment.coder.webname }}</a></strong>
-					<small>{{ comment.date|date:'Y.m.d H:G' }}</small>
-				</dt>
-				<dd>
-					{{ comment.text }}
-				</dd>
-			{% endfor %}
-			</dl>
-		</aside>
-		{% endif %}
-	</section>
+	{% include 'challenge/challenge_comments.html' with challenge=challenge can_comment=can_comment %}
 
 {% endblock %}
 
