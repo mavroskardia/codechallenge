@@ -1,0 +1,9 @@
+[uwsgi]
+	chdir = /srv/http/codechallenge/cc
+	module = cc.wsgi
+	home = /srv/http/codechallenge/ve
+	master = true
+	process = 10
+	socket = /srv/http/codechallenge/cc.sock
+	chmod-socket = 664
+	vacuum = true
