@@ -20,15 +20,30 @@
 
 	<aside class="pull-right">
 		<h3>Screenshots</h3>
-		<ul class="screenshots nav nav-pills">
-		{% for ss in entry.entryscreenshot_set.all %}
-			<li>
-				<a href="{{ ss.pic.url }}" title="screenshot for {{ challenge.name }}">
-					<img src="{{ ss.pic.url }}" alt="screenshot for {{ challenge.name }}" />
-				</a>
-			</li>
-		{% endfor %}
-		</ul>
+		<div class="col-md-6 col-lg-6">
+			<ul class="screenshots nav nav-pills">
+			{% for ss in entry.entryscreenshot_set.all %}
+				<li>
+					<a href="{{ ss.pic.url }}" title="screenshot for {{ challenge.name }}">
+						<img src="{{ ss.pic.url }}" alt="screenshot for {{ challenge.name }}" />
+					</a>
+				</li>
+			{% endfor %}
+			</ul>
+		</div>
+		<div class="col-md-6 col-lg-6">
+			<form action="{% url 'challenge:submit_entry_screenshot' challenge.id entry.id %}" method="post" enctype="multipart/form-data">
+				{% csrf_token %}
+				{% for field in screenshot_form %}
+				<div class="form-group">
+					{{ field.label }}
+					{{ field }}
+					{{ field.errors }}
+				</div>
+				{% endfor %}
+				<button type="submit" class="btn btn-sm btn-primary"><i class="fa fa-upload"></i> Upload</button>
+			</form>
+		</div>
 	</aside>
 
 	{% include 'challenge/entry_comments.html' with challenge=challenge entry=entry can_comment=can_comment comment_form=comment_form %}

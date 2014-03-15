@@ -2,7 +2,7 @@ from django import forms
 from django.forms import ModelForm
 from django.forms.models import inlineformset_factory
 
-from .models import Challenge, Rule, ChallengeComment, Entry, EntryComment
+from .models import Challenge, Rule, ChallengeComment, Entry, EntryComment, EntryScreenshot
 
 
 class ChallengeForm(ModelForm):
@@ -100,6 +100,14 @@ class SubmitEntryCommentForm(ModelForm):
 			'cols': 20,
 			'class': 'form-control'
 			}))
+
+class SubmitEntryScreenshotForm(ModelForm):
+	class Meta:
+		model = EntryScreenshot
+		fields = ('pic',)
+
+	pic = forms.FileField(label='Your screenshot:')
+
 
 AddRuleFormset = inlineformset_factory(Challenge, Rule, can_delete=False, extra=0)
 AddRuleTemplateFormset = inlineformset_factory(Challenge, Rule, form=RuleForm, can_delete=False, extra=1)
