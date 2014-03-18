@@ -41,7 +41,6 @@ class DetailView(View):
     def get(self, request, pk, *args, **kwargs):
         challenge = get_object_or_404(Challenge, pk=pk)
         data = self.get_data(request, challenge)
-        data['comment_form'] = self.comment_form_class()
         return render(request, self.template_name, data)
 
     def get_data(self, request, challenge):
@@ -54,6 +53,7 @@ class DetailView(View):
             data['challenges_im_in'] = Challenge.objects.filter(participant__coder=request.user.coder)
             data['is_owner'] = challenge.owner == request.user.coder
             data['can_comment'] = True
+            data['comment_form'] = self.comment_form_class()
 
             participant_query = challenge.participant_set.filter(coder=request.user.coder)
             if participant_query.exists():
