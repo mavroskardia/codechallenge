@@ -31,9 +31,9 @@
 		</h1>
 	</header>
 
-	{% include 'challenge/stats.html' with challenge=challenge participant=participant %}
-
 	{% include 'challenge/participants.html' with challenge=challenge %}
+
+	{% include 'challenge/stats.html' with challenge=challenge participant=participant %}
 
 	{% include 'challenge/rules.html' with challenge=challenge %}
 

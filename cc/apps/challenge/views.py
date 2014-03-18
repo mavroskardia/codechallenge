@@ -1,9 +1,15 @@
+import os
+
+from io import BytesIO
+from PIL import Image
+
 from django.http import HttpResponse
 from django.shortcuts import render, get_object_or_404
 from django.views import generic
 from django.views.generic.base import View
 from django.contrib import messages
 from django.http import HttpResponseRedirect
+from django.core.files import File
 from django.core.urlresolvers import reverse
 from django.contrib.auth.decorators import login_required
 from django.utils import timezone
@@ -214,7 +220,7 @@ class EntryDetail(View):
     def get_data(self, request, pk, epk):
         entry = get_object_or_404(Entry, pk=epk)
         challenge = get_object_or_404(Challenge, pk=pk)
-        can_comment = Coder.objects.filter(user=request.user).exists()
+        can_comment = request.user.is_authenticated() and Coder.objects.filter(user=request.user).exists()
         return {
             'challenge': challenge,
             'entry': entry,
@@ -255,9 +261,25 @@ class SubmitEntryScreenshot(View):
         if form.is_valid():
             ss = form.save(commit=False)
             ss.entry = entry
+            name, thumb = self.generate_thumbnail(request, ss.pic)
+            ss.thumbnail.save(name, thumb)
             ss.save()
             messages.info(request, 'Successfully submitted screenshot')
         else:
-            messages.warning(request, 'Screenshot failed to upload: %s' % form.errors)
+            messages.warning(request, 'Screenshot failed to upload: forgot to specify a file')
 
         return HttpResponseRedirect(reverse('challenge:entry', args=(pk,epk,)))
+
+
+    def generate_thumbnail(self, request, pic):
+        splits = os.path.splitext(os.path.split(pic.name)[-1])
+        name = splits[0] + '_resized' + splits[1]
+
+        fakefile = BytesIO()
+
+        img = Image.open(pic.file)
+        img.thumbnail((320,240), Image.ANTIALIAS)
+        img.save(fakefile, format=img.format)
+
+        return name, File(fakefile)
+

@@ -113,6 +113,7 @@ class EntryComment(models.Model):
 class EntryScreenshot(models.Model):
 	entry = models.ForeignKey(Entry)
 	pic = models.ImageField(upload_to='entry_screenshots')
+	thumbnail = models.ImageField(upload_to='entry_screenshot_thumbnails')
 
 	def __unicode__(self):
 		return 'screenshot for %s' % self.entry

@@ -12,26 +12,27 @@
 		</h1>
 	</header>
 
-	<section>
+	<section class="col-md-6 col-lg-6">
 		<h3>About</h3>
 		<p>{{ entry.description }}</p>
 		<strong><a class="btn btn-lg btn-primary" href="{{ entry.thefile.url }}"><i class="fa fa-download"></i> Download {{ entry.name }}</a></strong>
 	</section>
 
-	<aside class="pull-right">
+	<aside class="col-md-6 col-lg-6">
 		<h3>Screenshots</h3>
-		<div class="col-md-6 col-lg-6">
+		<div class="col-md-8 col-lg-8">
 			<ul class="screenshots nav nav-pills">
 			{% for ss in entry.entryscreenshot_set.all %}
 				<li>
 					<a href="{{ ss.pic.url }}" title="screenshot for {{ challenge.name }}">
-						<img src="{{ ss.pic.url }}" alt="screenshot for {{ challenge.name }}" />
+						<img src="{{ ss.thumbnail.url }}" alt="screenshot for {{ challenge.name }}" />
 					</a>
 				</li>
 			{% endfor %}
 			</ul>
 		</div>
-		<div class="col-md-6 col-lg-6">
+		{% if can_comment %}
+		<div class="col-md-4 col-lg-4">
 			<form action="{% url 'challenge:submit_entry_screenshot' challenge.id entry.id %}" method="post" enctype="multipart/form-data">
 				{% csrf_token %}
 				{% for field in screenshot_form %}
@@ -44,6 +45,7 @@
 				<button type="submit" class="btn btn-sm btn-primary"><i class="fa fa-upload"></i> Upload</button>
 			</form>
 		</div>
+		{% endif %}
 	</aside>
 
 	{% include 'challenge/entry_comments.html' with challenge=challenge entry=entry can_comment=can_comment comment_form=comment_form %}
