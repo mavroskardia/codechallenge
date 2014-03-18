@@ -11,12 +11,15 @@
                 {{ field.errors }}
             </div>
         {% endfor %}
-    
+
         <div id="js-rules">
             {{ rule_formset }}
-            <button class="btn btn-default" type="button" onclick="AddRule();">Add Rule</button>
+
+            <div class="form-group">
+                <button class="btn btn-default" type="button" onclick="AddRule();">Add Rule</button>
+            </div>
         </div>
-    
+
         <div class="form-group">
             <button type="submit" class="btn btn-primary btn-lg">Create</button>
         </div>
@@ -27,19 +30,22 @@
 {% block extrascripts %}
 
 <script type="text/javascript">
-	var $totalForms = $('#id_rule_set-TOTAL_FORMS');
-	var ruleCount = parseInt($totalForms.val());
+    var $totalForms = $('#id_rule_set-TOTAL_FORMS'),
+        ruleCount = parseInt($totalForms.val());
 
-	function AddRule() {
-		$.get('/challenge/add_rule_template/' + ruleCount, function(data) {
-			$('#js-rules').append(data);
-			$totalForms.val(++ruleCount);
-		});
-	}
+    function AddRule() {
+        $.get('/challenge/add_rule_template/' + ruleCount, function(data) {
+            var $new = $(data).hide();
+            $('#js-rules').append($new);
+            $new.fadeIn(); // JUICY
+            $totalForms.val(++ruleCount);
+        });
+    }
 
-	function DeleteRule(btn) {
-		$(btn).parents('[data-rule]').remove();
-	}
+    function DeleteRule(btn) {
+        $(btn).parents('[data-rule-container]').fadeOut(400, function() { this.remove(); });
+        ruleCount--;
+    }
 
 </script>
 

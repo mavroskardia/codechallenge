@@ -2,29 +2,11 @@
 
 {% block contents %}
 
-	<aside id="participant_info" class="pull-right">
-		<h3>Stats</h3>
-		<ul class="list-unstyled">
-			<li>{{ challenge.owner.webname }} is the owner</li>
-			{% if participant %}
-			<li>You've been working on this challenge since <strong>{{ participant.date_joined }}</strong></li>
-			<li>This challenge ends on <strong>{{ participant.end_date }}</strong> for you</li>
-			<li>
-				<div class="progress">
-					<div class="progress-bar" role="progressbar" aria-valuenow="" aria-valuemin="0" aria-valuemax="100" style="width: {{ participant.percent_complete }}%">
-						<span>{{ participant.days_left|floatformat:2 }} days left</span>
-					</div>
-				</div>
-			</li>
-			{% endif %}
-		</ul>
-	</aside>
-
 	<header>
 		<h1>
 			{% if is_owner %}
 				<span data-challenge-name onclick="MakeEditable(this);">{{ challenge.name }}</span>
-				<input data-input type="text" rel="name" value="{{ challenge.name }}" style="display:none;" />
+				<input data-input type="text" class="form-control" rel="name" value="{{ challenge.name }}" style="display:none;" />
 			{% else %}
 				{{ challenge.name }}
 			{% endif %}
@@ -40,7 +22,7 @@
 			<small>
 			{% if is_owner %}
 				<span data-challenge-duration onclick="MakeEditable(this);">{{ challenge.duration }}</span>
-				<input data-input type="text" rel="duration" value="{{ challenge.duration }}" style="display:none;" />
+				<input data-input type="text" class="form-control" rel="duration" value="{{ challenge.duration }}" style="display:none;" />
 				 day{{challenge.duration|pluralize}}
 			{% else %}
 				{{ challenge.duration }} day{{challenge.duration|pluralize}}
@@ -49,90 +31,15 @@
 		</h1>
 	</header>
 
-	{% if challenge.partcipant_set.count > 0 %}
-	<section>
-		<h3>Coders on this challenge</h3>
-		<ul>
-			{% for participant in challenge.partcipant_set.all %}
-			<li><a href="{% url 'coder:profile' participant.coder.user.username %}">{{participant.coder.webname}}</a></li>
-			{% endfor %}
-		</ul>
-		{% endif %}
-	</section>
+	{% include 'challenge/participants.html' with challenge=challenge %}
 
-	<section>
-		<h3>
-			Rules
-			{% if is_owner %}
-			<a href="#" onclick="AddRule();"><i class="fa fa-plus-circle"></i></a>
-			{% endif %}
-		</h3>
+	{% include 'challenge/stats.html' with challenge=challenge participant=participant %}
 
-		<ul data-rule-list>
-		{% for rule in challenge.rule_set.all %}
-			<li data-rule-container>
-				{% if is_owner %}
-					<span data-span>{{ rule }}</span>
-					<input data-input type="text" rel="description" value="{{ rule.description }}" style="display:none;" />
-					<a title="Edit Rule" href="#" onclick="MakeRuleEditable(this, {{ rule.id }});"><i class="fa fa-pencil"></i></a>
-					<a title="Delete Rule" href="#" onclick="DeleteRule(this, {{ rule.id }});"><i class="fa fa-times"></i></a>
-				{% else %}
-					{{ rule }}
-				{% endif %}
-			</li>
-		{% endfor %}
-		</ul>
-	</section>
+	{% include 'challenge/rules.html' with challenge=challenge %}
 
-	<div>
+	{% include 'challenge/entries.html' with challenge=challenge participant=participant %}
 
-		<aside class="pull-left col-md-5 col-lg-5">
-			{% if can_comment %}
-				<h3>Comment on <span data-challenge-name>{{ challenge.name }}</span></h3>
-				<form action="{% url 'challenge:submit_comment' challenge.id %}" method="post">
-		            {% csrf_token %}
-					<div class="form-group">
-						{{ comment_form.text }}
-					</div>
-					<button type="submit" class="btn btn-default">Submit</button>
-				</form>
-			{% endif %}
-
-			{% if challenge.challengecomment_set.count %}
-			<h4>Comments</h4>
-
-			<dl class="dl-horizontal">
-			{% for comment in challenge.challengecomment_set.all %}
-				<dt>
-					<strong><a href="{% url 'coder:profile' comment.coder.user.username %}">{{ comment.coder.webname }}</a></strong>
-					<small>{{ comment.date|date:'Y.m.d H:G' }}</small>
-				</dt>
-				<dd>
-					{{ comment.text }}
-				</dd>
-			{% endfor %}
-			</dl>
-			{% endif %}
-		</aside>
-
-		<aside class="pull-right col-md-6 col-lg-6">
-			<h3>Entries</h3>
-			<ul class="list-unstyled row">
-			{% for e in challenge.entry_set.all %}
-				<li>
-					<div class="col-md-2 col-lg-2">
-						<img src="http://placehold.it/50x50" alt="mini-screenshot of entry" />
-					</div>
-					<div class="col-md-10 col-lg-10">
-						<strong><a href="{% url 'challenge:entry' challenge.id e.id %}">{{ e.name }}</a></strong>
-						<p>submitted by <a href="{% url 'coder:profile' e.participant.coder.id %}">{{ e.participant.coder.webname }}</a> on {{ e.date|date:'Y.m.d H:G' }}</p>
-					</div>
-				</li>
-			{% endfor %}
-			</ul>
-		</aside>
-
-	</div>
+	{% include 'challenge/challenge_comments.html' with challenge=challenge can_comment=can_comment %}
 
 {% endblock %}
 
@@ -154,7 +61,7 @@
 
 	function UpdateChallenge(e, $span, $input) {
 		if (e.which == KEY_ENTER) {
-			
+
 			var rel = $input.attr('rel'),
 				val = $input.val();
 
@@ -176,7 +83,7 @@
 	}
 
 	function MakeRuleEditable(a, rule_id) {
-		var $span = $(a).siblings('[data-span]');
+		var $span = $(a).parents('[data-rule-container]').find('[data-span]');
 
 		$span.hide();
 		$span.siblings('[data-input]')
@@ -204,7 +111,7 @@
 
 	function UpdateRule(e, $span, $input, rule_id) {
 		if (e.which == KEY_ENTER) {
-			
+
 			var rel = $input.attr('rel'),
 				val = $input.val();
 

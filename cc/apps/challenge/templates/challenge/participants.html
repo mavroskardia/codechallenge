@@ -1,0 +1,13 @@
+	<section class="col-md-6 col-lg-6">
+		{% if challenge.participant_set.count > 0 %}
+		<h3>{{ challenge.participant_set.count }} Coder{{ challenge.participant_set.count|pluralize }} on this challenge</h3>
+		<ul>
+			{% for participant in challenge.participant_set.all %}
+			<li><a href="{% url 'coder:profile' participant.coder.user.username %}">{{participant.coder.webname}}</a></li>
+			{% endfor %}
+		</ul>
+		{% else %}
+		<a title="Join this challenge" class="btn btn-lg btn-primary" href="{% url 'challenge:join' challenge.id %}">Join Challenge</a>
+		{% endif %}
+	</section>
+

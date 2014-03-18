@@ -1,0 +1,21 @@
+	<aside class="pull-right entries">
+		<h3>Entries</h3>
+		{% if participant %}
+		<a class="btn btn-primary" href="{% url 'challenge:submit_entry' challenge.id %}">Submit your entry</a>
+		{% endif %}
+		<ul class="list-unstyled">
+		{% for e in challenge.entry_set.all %}
+			<li class="row">
+				<div class="col-md-2 col-lg-2">
+					<a class="thumbnail" href="{% url 'challenge:entry' challenge.id e.id %}">
+						<img src="{{ e.random_screenshot_url }}" alt="mini-screenshot of entry" />
+					</a>
+				</div>
+				<div class="col-md-10 col-lg-10">
+					<strong><a href="{% url 'challenge:entry' challenge.id e.id %}">{{ e.name }}</a></strong>
+					<p>submitted by <a href="{% url 'coder:profile' e.participant.coder.id %}">{{ e.participant.coder.webname }}</a> on {{ e.date|date:'Y.m.d H:G' }}</p>
+				</div>
+			</li>
+		{% endfor %}
+		</ul>
+	</aside>

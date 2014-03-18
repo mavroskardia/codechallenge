@@ -1,4 +1,7 @@
-<div data-rule>
-	{{ rule_formset }}
-	<button type="button" onclick="DeleteRule(this);">Delete</button>
+<div class="form-group row" data-rule-container>
+	<label class="col-md-12 col-lg-12" for="{{ rule_formset.description.id }}">Rule {{ rule_count|add:1 }}</label>
+	<div class="col-md-10 col-lg-10" data-rule>
+		{{ rule_formset.description }}
+	</div>
+	<button title="Delete" class="btn btn-danger" type="button" onclick="DeleteRule(this);"><i class="fa fa-times"></i></button>
 </div>

@@ -1,0 +1,17 @@
+	<aside id="participant_info" class="col-md-6 col-lg-6">
+		<h3>Stats</h3>
+		<ul class="list-unstyled">
+			<li>{{ challenge.owner.webname }} is the owner.</li>
+			{% if participant %}
+			<li>You've been working on this challenge since <strong>{{ participant.date_joined }}</strong></li>
+			<li>This challenge ends for you on <strong>{{ participant.end_date }}</strong></li>
+			<li>
+				<div class="progress">
+					<div class="progress-bar" role="progressbar" aria-valuenow="" aria-valuemin="0" aria-valuemax="100" style="width: {{ participant.percent_complete }}%">
+						<span>{{ participant.days_left|floatformat:2 }} days left</span>
+					</div>
+				</div>
+			</li>
+			{% endif %}
+		</ul>
+	</aside>
