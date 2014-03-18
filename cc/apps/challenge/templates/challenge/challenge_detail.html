@@ -13,9 +13,9 @@
 			<small>
 				{% if user.is_authenticated %}
 					{% if participant %}
-					<a title="Leave this challenge" href="{% url 'challenge:leave' challenge.id %}"><i class="fa fa-sign-out"></i></a>
+					<a title="Leave this challenge" href="{% url 'challenge:leave' challenge.id %}"><i class="fa fa-minus-square"></i></a>
 					{% else %}
-					<a title="Join this challenge" href="{% url 'challenge:join' challenge.id %}"><i class="fa fa-ticket"></i></a>
+					<a title="Join this challenge" href="{% url 'challenge:join' challenge.id %}"><i class="fa fa-plus-square"></i></a>
 					{% endif %}
 				{% endif %}
 			</small>
