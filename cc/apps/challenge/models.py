@@ -1,4 +1,5 @@
 import datetime
+import random
 
 from django.utils import timezone
 from django.core.exceptions import ValidationError
@@ -89,6 +90,11 @@ class Entry(models.Model):
 	date = models.DateTimeField(default=lambda:timezone.now())
 	thefile = models.FileField(upload_to='entries', verbose_name='File')
 
+	def random_screenshot_url(self):
+		ss = list(self.entryscreenshot_set.all())
+		random.shuffle(ss)
+		return ss[0].thumbnail.url
+
 	def __unicode__(self):
 		return '%s\'s entry for %s on %s' % (self.participant, self.participant.challenge, self.date)
 
@@ -113,6 +119,7 @@ class EntryComment(models.Model):
 class EntryScreenshot(models.Model):
 	entry = models.ForeignKey(Entry)
 	pic = models.ImageField(upload_to='entry_screenshots')
+	thumbnail = models.ImageField(upload_to='entry_screenshot_thumbnails')
 
 	def __unicode__(self):
 		return 'screenshot for %s' % self.entry

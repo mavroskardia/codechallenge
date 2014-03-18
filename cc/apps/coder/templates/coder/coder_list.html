@@ -1,18 +1,19 @@
 {% extends 'base.html' %}
 
 {% block contents %}
-
-	<h1>
-		Coders
-		<small><a href="{% url 'auth:register' %}"><i class="fa fa-plus-circle"></i></a></small>
-	</h1>
+	<h1>Coders</h1>
+	<p>
+		This is a list of every coder in the system in the order they joined.
+		{% if not user.is_authenticated %}You can be in this list if you <a href="{% url 'auth:register' %}">Register</a>.{% endif %}
+	</p>
 	<div class="row">
 		<ul class="nav pull-left nav-stacked nav-pills">
 		{% for coder in object_list %}
 			<li>
-				<a href="{% url 'coder:profile' coder.user.username %}">
+				<a href="{% url 'coder:profile' coder.id %}">
+					<img class="gravatar" src="{{ coder.avatar_url }}" alt="{{ coder.webname }}'s chosen image" />
 					{{coder.webname}}
-					<span class="badge badge-info">{{ coder.level.name }}</span>
+					<span class="badge badge-sm badge-info">{{ coder.level.name }}</span>
 				</a>
 			</li>
 		{% endfor %}

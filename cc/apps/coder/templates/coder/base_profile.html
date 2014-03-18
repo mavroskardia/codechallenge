@@ -1,38 +1,31 @@
 {% extends 'base.html' %}
 
 {% block contents %}
-	<div class="profile row">
-		<h2>Profile for {{ coder.user.username }}</h2>
+	<div class="profile col-md-6 col-lg-6">
+		<h2>
+			<img class="gravatar" src="{{ coder.avatar_url }}" alt="{{ coder.webname }}'s gravatar" />
+			{{ coder.webname }}
+			<small>{{ coder.tagline }}</small>
+		</h2>
 
-		<ul class="list-unstyled">
-			<li>
-				<span class="key">Name</span>
-				<span class="value">{{ coder.name }}</span>
-			</li>
-			<li>
-				<span class="key">Tagline</span>
-				<span class="value">{{ coder.tagline }}</span>
-			</li>
-			<li>
-				<span class="key">Level</span>
-				<span class="value">{{ coder.level }}</span>
-			</li>
-			<li>
-				<span class="key">About</span>
-				<span class="value">{{ coder.about }}</span>
-			</li>
-			<li>
-				<span class="key">Challenges</span>
-				<ul>
-				{% for participant in coder.participant_set.all %}
-					<li><a href="{% url 'challenge:detail' participant.challenge.id %}">{{ participant.challenge }}</a></li>
-				{% endfor %}
-				</ul>
-			</li>
-		</ul>
+		<p>A {{ coder.level }} with {{ coder.xp }} XP.</p>
+
+		<p>{{ coder.about }}</p>
 	</div>
 
 	{% block rw %}
 	{% endblock %}
+
+	<div class="row">
+		<aside class="col-md-6 col-lg-6">
+			<h4>Challenges</h4>
+			<ul class="nav nav-pills nav-stacked pull-left">
+				{% for participant in coder.participant_set.all %}
+					<li><a href="{% url 'challenge:detail' participant.challenge.id %}">{{ participant.challenge }}</a></li>
+				{% endfor %}
+				</li>
+			</ul>
+		</aside>
+	</div>
 
 {% endblock %}

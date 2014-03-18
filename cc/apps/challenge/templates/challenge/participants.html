@@ -1,9 +1,12 @@
+{% load codertags %}
 	<section class="col-md-6 col-lg-6">
 		{% if challenge.participant_set.count > 0 %}
-		<h3>{{ challenge.participant_set.count }} Coder{{ challenge.participant_set.count|pluralize }} on this challenge</h3>
-		<ul>
+		<h3>{{ challenge.participant_set.count }} Coder{{ challenge.participant_set.count|pluralize }} Participating:</h3>
+		<ul class="nav nav-pills nav-stacked pull-left">
 			{% for participant in challenge.participant_set.all %}
-			<li><a href="{% url 'coder:profile' participant.coder.user.username %}">{{participant.coder.webname}}</a></li>
+			<li>
+				{% coder participant.coder %}
+			</li>
 			{% endfor %}
 		</ul>
 		{% else %}

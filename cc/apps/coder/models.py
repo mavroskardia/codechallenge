@@ -1,3 +1,5 @@
+from hashlib import md5
+
 from django.db import models
 from django.contrib.auth.models import User
 
@@ -14,6 +16,10 @@ class Coder(models.Model):
 
 	def webname(self):
 		return self.name or self.user.username
+
+	def avatar_url(self):
+		h = md5(self.user.email.strip().lower().encode()).hexdigest()
+		return 'http://www.gravatar.com/avatar/%s.jpg' % h
 
 	def __str__(self):
 		return self.__unicode__()
