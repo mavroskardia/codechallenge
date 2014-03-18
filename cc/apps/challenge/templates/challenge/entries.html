@@ -7,7 +7,9 @@
 		{% for e in challenge.entry_set.all %}
 			<li class="row">
 				<div class="col-md-2 col-lg-2">
-					<img src="{{ e.random_screenshot_url }}" alt="mini-screenshot of entry" />
+					<a class="thumbnail" href="{% url 'challenge:entry' challenge.id e.id %}">
+						<img src="{{ e.random_screenshot_url }}" alt="mini-screenshot of entry" />
+					</a>
 				</div>
 				<div class="col-md-10 col-lg-10">
 					<strong><a href="{% url 'challenge:entry' challenge.id e.id %}">{{ e.name }}</a></strong>
