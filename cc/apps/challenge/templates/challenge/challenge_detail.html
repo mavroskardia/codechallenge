@@ -186,12 +186,16 @@
 	}
 
 	function AddRule() {
-		$('[data-rule-list]').append('<li>Test</li>');
+		// $('[data-rule-list]').append('<li>Test</li>');
+		$.get('/challenge/add_rule_template/1', function(data) {
+			$('[data-rule-list]').append(data);
+			// $totalForms.val(++ruleCount);
+		});
 	}
 
 	function DeleteRule(a, rule_id) {
 		var postData = { csrfmiddlewaretoken: '{{ csrf_token }}' };
-		
+
 		$.post('/challenge/' + rule_id + '/delete_rule', postData, function(data) {
 			if (data == 'yay')
 				$(a).parents('[data-rule-container]').remove();
