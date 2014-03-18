@@ -31,15 +31,19 @@
 		</h1>
 	</header>
 
-	{% include 'challenge/participants.html' with challenge=challenge %}
+	<div class="small">
+
+	{% include 'challenge/rules.html' with challenge=challenge %}
 
 	{% include 'challenge/stats.html' with challenge=challenge participant=participant %}
 
-	{% include 'challenge/rules.html' with challenge=challenge %}
+	{% include 'challenge/participants.html' with challenge=challenge %}
 
 	{% include 'challenge/entries.html' with challenge=challenge participant=participant %}
 
 	{% include 'challenge/challenge_comments.html' with challenge=challenge can_comment=can_comment %}
+
+	</div>
 
 {% endblock %}
 
