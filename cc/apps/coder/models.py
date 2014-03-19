@@ -2,6 +2,7 @@ from hashlib import md5
 
 from django.db import models
 from django.contrib.auth.models import User
+from django.dispatch import receiver
 
 
 class Coder(models.Model):
@@ -37,3 +38,5 @@ class Level(models.Model):
 	def __unicode__(self):
 		return '{self.name} ({self.starting_xp})'.format(self=self)
 
+
+# add signals for Coder here
