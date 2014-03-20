@@ -97,7 +97,11 @@
 	}
 
 	function AddRule() {
-		$('[data-rule-list]').append('<li>Test</li>');
+		// $('[data-rule-list]').append('<li>Test</li>');
+		$.get('/challenge/add_rule_template/1', function(data) {
+			$('[data-rule-list]').append(data);
+			// $totalForms.val(++ruleCount);
+		});
 	}
 
 	function DeleteRule(a, rule_id) {
@@ -132,7 +136,7 @@
 		}
 	}
 
-	$('[title]').tooltip({delay:{show:1000,hide:0}});
+	$('[title]').tooltip({container: 'body', delay:{show:1000,hide:0}});
 </script>
 
 {% endblock %}

@@ -3,7 +3,9 @@
 <!doctype html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+
     <title>Code Challenge (final name pending)</title>
 
     <link rel="stylesheet" href="//brick.a.ssl.fastly.net/Clear+Sans:300,400,500,700/Roboto:300,500,700/Raleway:200,300,500,600,900">
@@ -18,44 +20,56 @@
     {% endif %}
 </head>
 <body>
-    <header id="header">
-        <canvas id="binary_canvas" class="pull-right" width="500" height="75"></canvas>
-        <h1><a href="{% url 'home' %}">Code Challenge</a></h1>
-        <nav class="navbar navbar-default navbar-inverse">
-            <ul class="nav navbar-nav">
-                <li><a href="{% url 'challenge:index' %}"><i class="fa fa-trophy"></i> Challenges</a></li>
-                <li><a href="{% url 'coder:index' %}"><i class="fa fa-users"></i> Coders</a></li>
-            </ul>
-            <ul class="nav navbar-nav navbar-right">
-            {% if user.is_authenticated %}
-                <li><a href="{% url 'coder:profile' user.username %}"><i class="fa fa-user"></i> {{ user.coder.webname }}</a></li>
-                <li><a href="{% url 'auth:logout' %}"><i class="fa fa-sign-out"></i> Logout</a></li>
-            {% else %}
-                <li><a href="{% url 'auth:login' %}">Login</a></li>
-                <li><a href="{% url 'auth:register' %}">Sign up</a></li>
-            {% endif %}
-            </ul>
-        </nav>
-    </header>
-    <div id="contents" class="container-fluid">
-        {% if messages %}
-            <ul class="messages list-unstyled nav nav-pills">
-            {% for message in messages %}
-                <li class="col-xs-12 alert alert-dismissable {% if message.tags %}alert-{{message.tags}}{% endif %}">
-                    <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
-                    <span>{{message}}</span>
-                </li>
-            {% endfor %}
-            </ul>
-        {% endif %}
+    <div id="outer-wrap">
+        <div id="inner-wrap">
 
-        <div class="content-container">
-        {% block contents %}
-        {% endblock %}
+            <header id="top" role="banner">
+                <canvas id="binary_canvas" class="pull-right" width="500" height="125"></canvas>
+                <h1><a href="{% url 'home' %}">Code Challenge</a></h1>
+                <a href="#main-nav" id="nav-open-button" class="nav-button">Site navigation</a>
+            </header>
+
+            <nav id="main-nav" class="nav navbar navbar-inverse" role="navigation">
+                <h2>Things to do</h2>
+                <ul class="nav navbar-nav">
+                    <li><a href="{% url 'challenge:index' %}"><i class="fa fa-trophy"></i> Challenges</a></li>
+                    <li><a href="{% url 'coder:index' %}"><i class="fa fa-users"></i> Coders</a></li>
+                </ul>
+                <ul class="nav navbar-nav navbar-right">
+                {% if user.is_authenticated %}
+                    <li><a href="{% url 'coder:profile' user.username %}"><i class="fa fa-user"></i> {{ user.coder.webname }}</a></li>
+                    <li><a href="{% url 'auth:logout' %}"><i class="fa fa-sign-out"></i> Logout</a></li>
+                {% else %}
+                    <li><a href="{% url 'auth:login' %}">Login</a></li>
+                    <li><a href="{% url 'auth:register' %}">Sign up</a></li>
+                {% endif %}
+                </ul>
+                <a class="close-button" id="nav-close-button" href="#top">Return to content</a>
+            </nav>
+
+            <div id="contents" class="container-fluid" role="main">
+                {% if messages %}
+                    <ul class="messages list-unstyled nav nav-pills">
+                    {% for message in messages %}
+                        <li class="col-xs-12 alert alert-dismissable {% if message.tags %}alert-{{message.tags}}{% endif %}">
+                            <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
+                            <span>{{message}}</span>
+                        </li>
+                    {% endfor %}
+                    </ul>
+                {% endif %}
+
+                <div class="content-container">
+                {% block contents %}
+                {% endblock %}
+                </div>
+            </div>
+
+            <footer>
+            </footer>
+
         </div>
     </div>
-    <footer>
-    </footer>
 
     <script src="{% static 'jquery/dist/jquery.js' %}"></script>
     <script src="{% static 'bootstrap/dist/js/bootstrap.js' %}"></script>

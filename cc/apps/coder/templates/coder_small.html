@@ -1,5 +1,4 @@
-<a class="coder" href="{% url 'coder:profile' coder.id %}">
+<a class="coder_small" href="{% url 'coder:profile' coder.id %}" title="{{ title }}">
 	<img class="gravatar" src="{{ coder.avatar_url }}" alt="{{ coder.webname }}'s gravatar"/>
 	<span class="name">{{ coder.webname }}</span>
-	<span class="badge badge-info">{{ coder.level.name }}</span>
 </a>

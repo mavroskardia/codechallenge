@@ -93,7 +93,7 @@ class Entry(models.Model):
 	def random_screenshot_url(self):
 		ss = list(self.entryscreenshot_set.all())
 		random.shuffle(ss)
-		return ss[0].thumbnail.url
+		return 'http://placehold.it/100x100' if not ss else ss[0].thumbnail.url
 
 	def __unicode__(self):
 		return '%s\'s entry for %s on %s' % (self.participant, self.participant.challenge, self.date)
