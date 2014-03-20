@@ -1,3 +1,5 @@
+import re
+
 from django import forms
 from django.contrib.auth.models import User
 
@@ -30,5 +32,8 @@ class RegistrationForm(forms.Form):
 			self._errors['email'] = self.error_class([u'Email confirmation and email do not match.'])
 			del cleaned_data['email']
 			del cleaned_data['confirmemail']
+
+		if re.search('\W', username):
+			self._errors['username'] = self.error_class([u'Username cannot have whitespace'])
 
 		return cleaned_data
