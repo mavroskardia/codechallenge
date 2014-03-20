@@ -1,0 +1,159 @@
+/* all.less -- will refactor later */
+
+body {
+	margin-top: -20px;
+	text-rendering: optimizeLegibility;
+}
+
+a { font-family: "Roboto", Arial, sans-serif; }
+
+input[type="file"] { width: 90px; } // hide the text
+
+#top {
+	padding: 0; margin: 0;
+
+	h1 {
+		line-height: 80px;
+		font-size: 35pt;
+		text-indent: 25px;
+		font-family: "Roboto", sans-serif;
+	}
+
+	canvas {
+		position: absolute;
+		z-index: -1;
+	}
+
+	.nav-button { display: none; }
+}
+
+#main-nav {
+
+	margin: 0 1em;
+
+	.close-button, h2 { display: none; }
+
+	ul {
+		padding: 0;
+		margin: 0;
+
+		&:last-child { padding-right: 1em; }
+
+		li { margin: 0; padding: 0; }
+	}
+}
+
+#contents {
+	margin: 1em;
+
+	.content-container {
+
+		.row { margin-left: 0; }
+		.progress { margin: 1em 0 0 0; }
+
+		aside {
+			background-color: @gray-dark;
+			border: solid 1px @gray;
+			border-radius: @border-radius-base;
+			box-shadow: 3px 3px 10px rgba(0,0,0,0.15);
+			color: @gray-light;
+			padding: 1em;
+			font-size: 80%;
+			margin-bottom: 1em;
+		}
+
+		section {
+			display: inline-block;
+			padding: 1em;
+		}
+
+		h3 { padding: 0; margin: 0 0 0.5em 0; }
+		hr { border-color: transparent; }
+
+		.challenge-comments, .entry-comments {
+			.make-md-column(12);
+			.make-lg-column(12);
+		}
+
+		.screenshots {
+			a:hover { background-color: @gray; }
+			img {
+				padding: 2px;
+				border: solid 1px @thumbnail-border;
+				border-radius: @border-radius-base;
+			}
+		}
+
+		.entries {
+			.make-md-column(6);
+			.make-lg-column(6);
+
+			li { margin-top: 1em; }
+		}
+
+		#participant_info {
+			.make-lg-column(6);
+			.make-md-column(6);
+
+			vertical-align: top;
+			> * { vertical-align: top; }
+		}
+
+		[data-challenge-name],
+		[data-challenge-duration] {
+			cursor: pointer;
+		}
+	}
+}
+
+.errorlist {
+	color: @state-danger-text;
+}
+
+.gravatar {
+	.thumbnail;
+	.img-circle;
+	border-color: @thumbnail-border;
+	display: inline-block;
+	margin: 0 10px 0 0;
+
+	&:hover { border-color: @thumbnail-border-hover; }
+}
+
+.coder_small {
+	display: inline-block;
+	.text-center;
+
+	.gravatar {
+		width: 50px;
+		margin: 0 auto;
+	}
+
+	span { display: block; }
+}
+
+.comment-row {
+	height: 80px;
+
+	p {
+		position: relative;
+		display: inline-block;
+		line-height: 80px;
+		top: -35px;
+		margin: 0;
+		margin-left: 0.5em;
+	}
+}
+
+// nav stuff
+#viewport {
+	position: relative;
+	overflow: hidden;
+	width: 100%;
+}
+
+#frame {
+	position: relative;
+	width: 100%;
+}
+
