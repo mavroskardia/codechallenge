@@ -10,10 +10,9 @@
 		</ul>
 	</aside>
 
-	<h2>
-		Welcome
-		<small>Sign up to be a coder, participate in challenges, earn experience points.</small>
-	</h2>
+	<p class="lead">
+		Sign up to be a coder, participate in challenges, earn experience points.
+	</p>
 
 	<div class="row">
 	{% if not user.is_authenticated %}
@@ -23,11 +22,12 @@
 			<li><a href="{% url 'auth:register' %}">Signup to be a coder</a></li>
 		</ul>
 	{% else %}
-		<p>Welcome back, {{ user.coder.name }}. Here are your active challenges:</p>
+		<p>Welcome back, {{ user.coder.webname }}. Here are your active challenges:</p>
 		<ul class="nav nav-pills nav-stacked pull-left">
 		{% for p in user.coder.participant_set.all %}
 			<li><a href="{% url 'challenge:detail' p.challenge.id %}">{{ p.challenge.name }}</a></li>
 		{% endfor %}
+			<li><a href="{% url 'challenge:create' %}"><i class="fa fa-plus-circle"></i> Create a new challenge</a></li>
 		</ul>
 	{% endif %}
 	</div>

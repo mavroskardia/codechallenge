@@ -1,0 +1,5 @@
+<a href="{% url 'coder:profile' coder.id %}">
+	<img class="gravatar" src="{{ coder.avatar_url }}" alt="{{ coder.webname }}'s gravatar"/>
+	<span class="name">{{ coder.webname }}</span>
+	<span class="badge badge-info">{{ coder.level.name }}</span>
+</a>
