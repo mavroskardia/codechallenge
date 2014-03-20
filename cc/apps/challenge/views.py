@@ -125,7 +125,7 @@ class CreateView(View):
                 rule_formset.save()
 
                 messages.info(request, 'Challenge created!')
-                return HttpResponseRedirect(reverse('challenge:index'))
+                return HttpResponseRedirect(reverse('challenge:detail', args=(challenge.id,)))
 
         return render(request, self.template_name, { 'form': form, 'rule_formset': rule_formset })
 
@@ -208,7 +208,7 @@ class SubmitEntry(View):
             entry.participant = challenge.participant_set.get(coder__user=request.user)
             entry.save()
             messages.info(request, 'Submitted your entry!')
-            return HttpResponseRedirect(reverse('challenge:detail', args=(pk,)))
+            return HttpResponseRedirect(reverse('challenge:entry', args=(pk,entry.id,)))
 
         return render(request, self.template_name, { 'form': form, 'challenge': challenge })
 
