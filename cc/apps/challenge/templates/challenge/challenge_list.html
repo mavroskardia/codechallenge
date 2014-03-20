@@ -5,18 +5,19 @@
 	<header>
 		<h1>
 			Challenges
-			{% if user.is_authenticated and user.coder %}
-			<small><a href="{% url 'challenge:create' %}"><i class="fa fa-plus-circle"></i></a></small>
-			{% endif %}
 		</h1>
 	</header>
 	<div class="row">
 		<ul class="nav nav-pills pull-left nav-stacked">
+		{% if user.is_authenticated and user.coder %}
+			<li><a href="{% url 'challenge:create' %}"><i class="fa fa-plus-circle"></i> Create a new Challenge</a></li>
+			<li><hr/></li>
+		{% endif %}
 		{% for challenge in challenge_list %}
 			<li>
 				<a href="{% url 'challenge:detail' challenge.id %}">
 					{{ challenge.name }}
-					<span class="badge" title="Number of coders participating in this challenge">{{ challenge.participant_set.count }}</span>
+					<span class="badge" title="{{ challenge.participant_set.count }} coder{{ challenge.participant_set.count|pluralize }} participating in this challenge">{{ challenge.participant_set.count }}</span>
 					{% if challenge in challenges_im_in %}
 					<span class="label label-success" title="You are participating in this challenge"><i class="fa fa-check"></i></span>
 					{% endif %}

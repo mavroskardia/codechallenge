@@ -60,6 +60,8 @@ input[type="file"] { width: 90px; } // hide the text
 			padding: 1em;
 			font-size: 80%;
 			margin-bottom: 1em;
+
+			h3 { margin-bottom: 0.5em; }
 		}
 
 		section {
@@ -67,8 +69,8 @@ input[type="file"] { width: 90px; } // hide the text
 			padding: 1em;
 		}
 
-		h3 { padding: 0; margin: 0 0 0.5em 0; }
-		hr { border-color: transparent; }
+		h1, h2, h3 { padding: 0; margin: 0; }
+		hr { border-color: @gray; }
 
 		.challenge-comments, .entry-comments {
 			.make-md-column(12);

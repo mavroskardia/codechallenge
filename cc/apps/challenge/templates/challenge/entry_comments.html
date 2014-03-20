@@ -1,4 +1,4 @@
-<section class="entry-comments">
+<section class="col-md-6 col-lg-6">
 	{% if can_comment %}
 		<h3>Comment on {{ entry.name }}</h3>
 		<form class="row" action="{% url 'challenge:submit_entry_comment' challenge.id entry.id %}" method="post">

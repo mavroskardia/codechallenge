@@ -1,12 +1,12 @@
-	<section class="pull-left col-md-6 col-lg-6">
-		<h3>
-			Rules
-			{% if is_owner %}
-			<a href="#" onclick="AddRule();"><i class="fa fa-plus-circle"></i></a>
-			{% endif %}
-		</h3>
+	<section>
+		<h3>Rules</h3>
+		{% if is_owner %}
+			<ul class="nav nav-pills nav-stacked pull-left">
+				<li><a href="#" onclick="AddRule();"><i class="fa fa-plus-circle"></i> Add Rule</a></li>
+			</ul>
+		{% endif %}
 
-		<ul data-rule-list>
+		<ol data-rule-list class="col-md-12 col-lg-12">
 		{% for rule in challenge.rule_set.all %}
 			<li data-rule-container>
 				{% if is_owner %}
@@ -19,5 +19,5 @@
 				{% endif %}
 			</li>
 		{% endfor %}
-		</ul>
+		</ol>
 	</section>
