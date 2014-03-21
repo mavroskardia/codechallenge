@@ -78,7 +78,7 @@ var HeaderAnimator = (function() {
 
 	HeaderAnimator.prototype.create_particle = function() {
 		var digit = Math.random() > 0.5 ? '0' : '1',
-			hsla = new HSLA(0, 0, 0, 0.1*Math.random()),
+			hsla = new HSLA(0, 0, 0, 0.2*Math.random()),
 			p = new Particle(digit, this.canvas.width, (Math.floor(Math.random()*this.canvas.height/14)*14), -Math.random(), 0.0, hsla);
 
 		return p;
@@ -105,7 +105,6 @@ var HeaderAnimator = (function() {
 
 			this.c.fillStyle = p.hsla.toString();
 			this.c.strokeStyle = p.hsla.toString();
-			//this.c.fillText(p.digit, p.x, p.y);
 			this.c.strokeText(p.digit, p.x, p.y);
 		}
 
