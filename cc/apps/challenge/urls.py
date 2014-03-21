@@ -6,6 +6,7 @@ from apps.challenge import views
 urlpatterns = patterns('',
 	url(r'^$', views.IndexView.as_view(), name='index'),
 	url(r'^(?P<pk>\d+)/$', views.DetailView.as_view(), name='detail'),
+	url(r'^(?P<pk>\d+)/maintain$', views.MaintainView.as_view(), name='maintain'),
 	url(r'^(?P<pk>\d+)/join$', views.JoinView.as_view(), name='join'),
 	url(r'^(?P<pk>\d+)/leave$', views.LeaveView.as_view(), name='leave'),
 	url(r'^(?P<pk>\d+)/update$', views.UpdateView.as_view(), name='update'),

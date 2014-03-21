@@ -1,0 +1,120 @@
+{% extends 'base.html' %}
+
+{% block contents %}
+
+{% if is_owner %}
+
+<a href="{% url 'challenge:detail' challenge.id %}">Back to Challenge</a>
+
+<div class="row">
+    <form action="{% url 'challenge:maintain' challenge.id %}" method="post" class="col-12 col-lg-5 text-left">
+        {% csrf_token %}
+        {% for field in form %}
+            <div class="form-group">
+                {{ field.label }}
+                {{ field }}
+                {{ field.errors }}
+            </div>
+        {% endfor %}
+
+        <div id="js-rules">
+            {{ rule_formset.management_form }}
+
+			<section class="col-md-6 col-lg-6">
+				<h3>
+					Rules
+					<a href="#" onclick="AddRule();"><i class="fa fa-plus-circle"></i></a>
+				</h3>
+
+				<ul data-rule-list>
+				{% for field in rule_formset %}
+		            <li data-rule-container>
+		                {{ field.label }}
+		                {{ field }}
+		                {{ field.errors }}
+		                <a title="Delete Rule" href="#" onclick="DeleteRule(this, 3);"><i class="fa fa-times"></i></a>
+		            </li>
+		        {% endfor %}
+		        </ul>
+			</section>
+
+            <div class="form-group">
+                <button class="btn btn-default" type="button" onclick="AddRule();">Add Rule</button>
+            </div>
+        </div>
+
+        <div class="form-group">
+            <button type="submit" class="btn btn-primary btn-lg">Update</button>
+        </div>
+    </form>
+</div>
+
+{% endif %}
+
+{% endblock %}
+
+{% block extrascripts %}
+
+<script type="text/javascript">
+	var KEY_ENTER = 13,
+		KEY_ESCAPE = 27;
+
+    var $totalForms = $('#id_rule_set-TOTAL_FORMS'),
+        ruleCount = parseInt($totalForms.val());
+
+    function AddRule() {
+        $.get('/challenge/add_rule_template/' + ruleCount, function(data) {
+            var $new = $(data).hide();
+            $('#js-rules').append($new);
+            $new.fadeIn(); // JUICY
+            $totalForms.val(++ruleCount);
+        });
+    }
+
+	function MakeRuleEditable(a, rule_id) {
+		var $span = $(a).parents('[data-rule-container]').find('[data-span]');
+
+		$span.hide();
+		$span.siblings('[data-input]')
+			.show()
+			.keydown(function(e) { UpdateRule(e, $span, $(this), rule_id); })
+			.focus();
+	}
+
+	function UpdateRule(e, $span, $input, rule_id) {
+		if (e.which == KEY_ENTER) {
+
+			var rel = $input.attr('rel'),
+				val = $input.val();
+
+			var postData = {
+				csrfmiddlewaretoken: '{{ csrf_token }}',
+				name: rel,
+				value: val
+			};
+
+			$.post('/challenge/' + rule_id + '/update_rule', postData, function(data) {
+				$span.text(val).show();
+				$input.hide();
+			});
+		}
+		else if (e.which == KEY_ESCAPE) {
+			$span.show();
+			$input.hide();
+		}
+	}
+
+	function DeleteRule(btn, rule_id) {
+		var postData = { csrfmiddlewaretoken: '{{ csrf_token }}' };
+
+		$.post('/challenge/' + rule_id + '/delete_rule', postData, function(data) {
+			if (data == 'yay') {
+				$(btn).parents('[data-rule-container]').fadeOut(400, function() { this.remove(); });
+        		ruleCount--;
+			}
+		});
+	}
+
+</script>
+
+{% endblock %}

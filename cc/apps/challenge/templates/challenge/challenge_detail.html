@@ -4,11 +4,9 @@
 
 	<header>
 		<h1>
+			{{ challenge.name }}
 			{% if is_owner %}
-				<span data-challenge-name onclick="MakeEditable(this);">{{ challenge.name }}</span>
-				<input data-input type="text" class="form-control" rel="name" value="{{ challenge.name }}" style="display:none;" />
-			{% else %}
-				{{ challenge.name }}
+			<a href="{% url 'challenge:maintain' challenge.id %}"><i class="fa fa-pencil"></i></a>
 			{% endif %}
 			<small>
 				{% if user.is_authenticated %}
@@ -20,13 +18,7 @@
 				{% endif %}
 			</small>
 			<small>
-			{% if is_owner %}
-				<span data-challenge-duration onclick="MakeEditable(this);">{{ challenge.duration }}</span>
-				<input data-input type="text" class="form-control" rel="duration" value="{{ challenge.duration }}" style="display:none;" />
-				 day{{challenge.duration|pluralize}}
-			{% else %}
 				{{ challenge.duration }} day{{challenge.duration|pluralize}}
-			{% endif %}
 			</small>
 		</h1>
 	</header>
@@ -44,99 +36,5 @@
 	{% include 'challenge/challenge_comments.html' with challenge=challenge can_comment=can_comment %}
 
 	</div>
-
-{% endblock %}
-
-{% block extrascripts %}
-
-<script type="text/javascript">
-	var KEY_ENTER = 13,
-		KEY_ESCAPE = 27;
-
-	function MakeEditable(span) {
-		var $span = $(span);
-
-		$span.hide();
-		$span.siblings('[data-input]')
-			.show()
-			.keydown(function(e) { UpdateChallenge(e, $span, $(this)); })
-			.focus();
-	}
-
-	function UpdateChallenge(e, $span, $input) {
-		if (e.which == KEY_ENTER) {
-
-			var rel = $input.attr('rel'),
-				val = $input.val();
-
-			var postData = {
-				csrfmiddlewaretoken: '{{ csrf_token }}',
-				name: rel,
-				value: val
-			};
-
-			$.post('/challenge/{{ challenge.id }}/update', postData, function(data) {
-				$('[data-challenge-' + rel + ']').text(val).show();
-				$input.hide();
-			});
-		}
-		else if (e.which == KEY_ESCAPE) {
-			$span.show();
-			$input.hide();
-		}
-	}
-
-	function MakeRuleEditable(a, rule_id) {
-		var $span = $(a).parents('[data-rule-container]').find('[data-span]');
-
-		$span.hide();
-		$span.siblings('[data-input]')
-			.show()
-			.keydown(function(e) { UpdateRule(e, $span, $(this), rule_id); })
-			.focus();
-	}
-
-	function AddRule() {
-		// $('[data-rule-list]').append('<li>Test</li>');
-		$.get('/challenge/add_rule_template/1', function(data) {
-			$('[data-rule-list]').append(data);
-			// $totalForms.val(++ruleCount);
-		});
-	}
-
-	function DeleteRule(a, rule_id) {
-		var postData = { csrfmiddlewaretoken: '{{ csrf_token }}' };
-
-		$.post('/challenge/' + rule_id + '/delete_rule', postData, function(data) {
-			if (data == 'yay')
-				$(a).parents('[data-rule-container]').remove();
-		});
-	}
-
-	function UpdateRule(e, $span, $input, rule_id) {
-		if (e.which == KEY_ENTER) {
-
-			var rel = $input.attr('rel'),
-				val = $input.val();
-
-			var postData = {
-				csrfmiddlewaretoken: '{{ csrf_token }}',
-				name: rel,
-				value: val
-			};
-
-			$.post('/challenge/' + rule_id + '/update_rule', postData, function(data) {
-				$span.text(val).show();
-				$input.hide();
-			});
-		}
-		else if (e.which == KEY_ESCAPE) {
-			$span.show();
-			$input.hide();
-		}
-	}
-
-	$('[title]').tooltip({delay:{show:1000,hide:0}});
-</script>
 
 {% endblock %}
