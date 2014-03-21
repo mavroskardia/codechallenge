@@ -71,39 +71,6 @@
         });
     }
 
-	function MakeRuleEditable(a, rule_id) {
-		var $span = $(a).parents('[data-rule-container]').find('[data-span]');
-
-		$span.hide();
-		$span.siblings('[data-input]')
-			.show()
-			.keydown(function(e) { UpdateRule(e, $span, $(this), rule_id); })
-			.focus();
-	}
-
-	function UpdateRule(e, $span, $input, rule_id) {
-		if (e.which == KEY_ENTER) {
-
-			var rel = $input.attr('rel'),
-				val = $input.val();
-
-			var postData = {
-				csrfmiddlewaretoken: '{{ csrf_token }}',
-				name: rel,
-				value: val
-			};
-
-			$.post('/challenge/' + rule_id + '/update_rule', postData, function(data) {
-				$span.text(val).show();
-				$input.hide();
-			});
-		}
-		else if (e.which == KEY_ESCAPE) {
-			$span.show();
-			$input.hide();
-		}
-	}
-
 	function DeleteRule(btn, rule_id) {
 		var postData = { csrfmiddlewaretoken: '{{ csrf_token }}' };
 

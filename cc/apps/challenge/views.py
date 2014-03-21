@@ -104,18 +104,6 @@ class DetailView(View):
 
         return data
 
-class UpdateView(View):
-    @method_decorator(login_required)
-    def post(self, request, pk, *args, **kwargs):
-        challenge = get_object_or_404(Challenge, pk=pk)
-
-        if (challenge.owner == request.user.coder):
-            setattr(challenge, request.POST['name'], request.POST['value'])
-            challenge.save()
-            return HttpResponse('Challenge updated.')
-        else:
-            return HttpResponse('Can not update a challenge that you do not own.')
-
 class UpdateRuleView(View):
     @method_decorator(login_required)
     def post(self, request, pk, *args, **kwargs):
