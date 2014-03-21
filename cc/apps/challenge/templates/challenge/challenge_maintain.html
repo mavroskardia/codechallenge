@@ -2,62 +2,56 @@
 
 {% block contents %}
 
-{% if is_owner %}
+    <header>
+        <h1>
+            <a href="{% url 'challenge:detail' challenge.id %}">{{ challenge.name }}</a>
+            <small>Maintenance</small>
+        </h1>
+    </header>
 
-<a href="{% url 'challenge:detail' challenge.id %}">Back to Challenge</a>
+    <section class="col-lg-4 col-md-12">
+        <form action="{% url 'challenge:maintain' challenge.id %}" method="post">
+            {% csrf_token %}
+            {% for field in form %}
+                <div class="form-group">
+                    {{ field.label }}
+                    {{ field }}
+                    {{ field.errors }}
+                </div>
+            {% endfor %}
 
-<div class="row">
-    <form action="{% url 'challenge:maintain' challenge.id %}" method="post" class="col-12 col-lg-5 text-left">
-        {% csrf_token %}
-        {% for field in form %}
-            <div class="form-group">
-                {{ field.label }}
-                {{ field }}
-                {{ field.errors }}
-            </div>
-        {% endfor %}
-
-        <div id="js-rules">
-            {{ rule_formset.management_form }}
-
-			<section class="col-md-6 col-lg-6">
-				<h3>
-					Rules
-					<a href="#" onclick="AddRule();"><i class="fa fa-plus-circle"></i></a>
-				</h3>
-
-				<ul data-rule-list>
-				{% for field in rule_formset %}
-		            <li data-rule-container>
-		                {{ field.label }}
-		                {{ field }}
-		                {{ field.errors }}
-		                <a title="Delete Rule" href="#" onclick="DeleteRule(this, 3);"><i class="fa fa-times"></i></a>
-		            </li>
-		        {% endfor %}
-		        </ul>
-			</section>
-
-            <div class="form-group">
-                <button class="btn btn-default" type="button" onclick="AddRule();">Add Rule</button>
-            </div>
-        </div>
-
-        <div class="form-group">
+            <fieldset id="js-rules" class="challenge-rules">
+                {{ rule_formset.management_form }}
+                <legend>Rules</legend>
+                <ul class="nav nav-pills nav-stacked col-lg-4 col-md-4 float-left">
+                    <li><a href="#" onclick="AddRule(); return false;"><i class="fa fa-plus-circle"></i> Add Rule</a></li>
+                </ul>
+                <ul data-rule-list class="col-lg-12 col-md-12 list-unstyled">
+                {% for field in rule_formset %}
+                    <li data-rule-container class="row">
+                        <div class="col-lg-10 col-md-10">
+                            {{ field.description }}
+                        </div>
+                        <button title="Delete" class="btn btn-danger" type="button" onclick="DeleteRule(this);"><i class="fa fa-times"></i></button>
+                        {{ field.errors }}
+                    </li>
+                {% endfor %}
+                </ul>
+                <ul class="nav nav-pills nav-stacked col-lg-4 col-md-4 float-left">
+                    <li><a href="#" onclick="AddRule(); return false;"><i class="fa fa-plus-circle"></i> Add Rule</a></li>
+                </ul>
+            </fieldset>
             <button type="submit" class="btn btn-primary btn-lg">Update</button>
-        </div>
-    </form>
-</div>
-
-{% endif %}
+        </form>
+    </section>
 
 {% endblock %}
 
 {% block extrascripts %}
 
 <script type="text/javascript">
-	var KEY_ENTER = 13,
-		KEY_ESCAPE = 27;
+    var KEY_ENTER = 13,
+        KEY_ESCAPE = 27;
 
     var $totalForms = $('#id_rule_set-TOTAL_FORMS'),
         ruleCount = parseInt($totalForms.val());
@@ -65,22 +59,22 @@
     function AddRule() {
         $.get('/challenge/add_rule_template/' + ruleCount, function(data) {
             var $new = $(data).hide();
-            $('#js-rules').append($new);
-            $new.fadeIn(); // JUICY
+            $('#js-rules > *:last').before($new);
+            $new.fadeIn();
             $totalForms.val(++ruleCount);
         });
     }
 
-	function DeleteRule(btn, rule_id) {
-		var postData = { csrfmiddlewaretoken: '{{ csrf_token }}' };
+    function DeleteRule(btn, rule_id) {
+        var postData = { csrfmiddlewaretoken: '{{ csrf_token }}' };
 
-		$.post('/challenge/' + rule_id + '/delete_rule', postData, function(data) {
-			if (data == 'yay') {
-				$(btn).parents('[data-rule-container]').fadeOut(400, function() { this.remove(); });
-        		ruleCount--;
-			}
-		});
-	}
+        $.post('/challenge/' + rule_id + '/delete_rule', postData, function(data) {
+            if (data == 'yay') {
+                $(btn).parents('[data-rule-container]').fadeOut(400, function() { this.remove(); });
+                ruleCount--;
+            }
+        });
+    }
 
 </script>
 

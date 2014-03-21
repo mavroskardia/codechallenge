@@ -122,5 +122,5 @@ class SubmitEntryScreenshotForm(ModelForm):
     pic = forms.FileField(label='Your screenshot:')
 
 
-AddRuleFormset = inlineformset_factory(Challenge, Rule, can_delete=False, extra=0)
+AddRuleFormset = inlineformset_factory(Challenge, Rule, form=RuleForm, can_delete=False, extra=0)
 AddRuleTemplateFormset = inlineformset_factory(Challenge, Rule, form=RuleForm, can_delete=False, extra=1)
