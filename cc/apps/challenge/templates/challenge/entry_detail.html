@@ -3,24 +3,24 @@
 
 {% block contents %}
 
-	<header>
+	<header class="col-md-6 col-lg-6">
 		<h1>
 			{{ entry.name }}
 			<small>
 				for <a href="{% url 'challenge:detail' challenge.id %}">{{ challenge.name }}</a>
 			</small>
 		</h1>
+
+		<p>{{ entry.description }}</p>
+		<strong><a class="btn btn-primary" href="{{ entry.thefile.url }}"><i class="fa fa-download"></i> Download {{ entry.name }}</a></strong>
 	</header>
 
 	<section class="col-md-6 col-lg-6">
-		<p>{{ entry.description }}</p>
-		<strong><a class="btn btn-primary" href="{{ entry.thefile.url }}"><i class="fa fa-download"></i> Download {{ entry.name }}</a></strong>
-
 		<h4>This submission is by:</h4>
 		{% coder entry.participant.coder %}
 	</section>
 
-	<aside class="col-md-6 col-lg-6">
+	<aside class="col-md-6 col-lg-6 pull-right">
 		<h3>Screenshots</h3>
 		<div class="col-md-8 col-lg-8">
 			<ul class="screenshots nav nav-pills">

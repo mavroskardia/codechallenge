@@ -1,11 +1,10 @@
-	<section class="pull-left col-md-6 col-lg-6">
+	<section>
 		<h3>Rules</h3>
-
-		<ul data-rule-list>
+		<ol data-rule-list class="col-md-12 col-lg-12">
 		{% for rule in challenge.rule_set.all %}
 			<li data-rule-container>
 				{{ rule.description }}
 			</li>
 		{% endfor %}
-		</ul>
+		</ol>
 	</section>
