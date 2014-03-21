@@ -33,7 +33,7 @@
                         <div class="col-lg-10 col-md-10">
                             {{ field.description }}
                         </div>
-                        <button title="Delete" class="btn btn-danger" type="button" onclick="DeleteRule(this);"><i class="fa fa-times"></i></button>
+                        <button title="Delete" class="btn btn-danger" type="button" onclick="DeleteRule(this, {{ field.id.value }});"><i class="fa fa-times"></i></button>
                         {{ field.errors }}
                     </li>
                 {% endfor %}
@@ -69,7 +69,7 @@
     function DeleteRule(btn, rule_id) {
         var postData = { csrfmiddlewaretoken: '{{ csrf_token }}' };
 
-        $.post('/challenge/' + rule_id + '/delete_rule', postData, function(data) {
+        $.post('/challenge/rule/' + rule_id + '/delete', postData, function(data) {
             if (data == 'yay') {
                 $(btn).parents('[data-rule-container]').fadeOut(400, function() { this.remove(); });
                 ruleCount--;

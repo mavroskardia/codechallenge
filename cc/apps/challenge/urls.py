@@ -13,8 +13,7 @@ urlpatterns = patterns('',
 	url(r'^(?P<pk>\d+)/leave$', joinleave.LeaveView.as_view(), name='leave'),
 
 	url(r'^add_rule_template/(?P<rule_count>\d+)$', rules.AddRuleTemplate.as_view(), name='add_rule_template'),
-	url(r'^(?P<pk>\d+)/update_rule$', rules.UpdateRuleView.as_view(), name='update_rule'),
-	url(r'^(?P<pk>\d+)/delete_rule$', rules.DeleteRuleView.as_view(), name='delete_rule'),
+	url(r'^rule/(?P<pk>\d+)/delete$', rules.DeleteRuleView.as_view(), name='delete_rule'),
 
 	url(r'^(?P<pk>\d+)/submit_comment$', comments.SubmitComment.as_view(), name='submit_comment'),
 	url(r'^(?P<pk>\d+)/submit_entry$', entry.SubmitEntry.as_view(), name='submit_entry'),
