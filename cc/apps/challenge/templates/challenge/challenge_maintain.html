@@ -29,6 +29,7 @@
                 <ul data-rule-list class="col-lg-12 col-md-12 list-unstyled">
                 {% for field in rule_formset %}
                     <li data-rule-container class="row">
+                        {{ field.id }}
                         <div class="col-lg-10 col-md-10">
                             {{ field.description }}
                         </div>
