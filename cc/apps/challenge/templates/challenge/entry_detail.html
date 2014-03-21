@@ -20,7 +20,9 @@
 		{% coder entry.participant.coder %}
 	</section>
 
-	<aside class="col-md-6 col-lg-6 pull-right">
+	{% include 'challenge/entry_comment_box.html' with challenge=challenge entry=entry can_comment=can_comment comment_form=comment_form %}
+
+	<aside class="col-md-6 col-lg-6">
 		<h3>Screenshots</h3>
 		<div class="col-md-8 col-lg-8">
 			<ul class="screenshots nav nav-pills">
@@ -52,4 +54,10 @@
 
 	{% include 'challenge/entry_comments.html' with challenge=challenge entry=entry can_comment=can_comment comment_form=comment_form %}
 
+{% endblock %}
+
+{% block extrascripts %}
+	<script>
+		$('[title]').tooltip({container: 'body', delay:{show:1000,hide:0}});
+	</script>
 {% endblock %}
