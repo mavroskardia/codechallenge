@@ -1,22 +1,9 @@
 	<section>
 		<h3>Rules</h3>
-		{% if is_owner %}
-			<ul class="nav nav-pills nav-stacked pull-left">
-				<li><a href="#" onclick="AddRule();"><i class="fa fa-plus-circle"></i> Add Rule</a></li>
-			</ul>
-		{% endif %}
-
 		<ol data-rule-list class="col-md-12 col-lg-12">
 		{% for rule in challenge.rule_set.all %}
 			<li data-rule-container>
-				{% if is_owner %}
-					<span data-span>{{ rule.description }}</span>
-					<textarea data-input type="text" class="form-control" rel="description" style="width: 80%; display:none;">{{ rule.description }}</textarea>
-					<a title="Edit Rule" href="#" onclick="MakeRuleEditable(this, {{ rule.id }});"><i class="fa fa-pencil"></i></a>
-					<a title="Delete Rule" href="#" onclick="DeleteRule(this, {{ rule.id }});"><i class="fa fa-times"></i></a>
-				{% else %}
-					{{ rule.description }}
-				{% endif %}
+				{{ rule.description }}
 			</li>
 		{% endfor %}
 		</ol>

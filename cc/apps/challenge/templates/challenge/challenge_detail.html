@@ -4,20 +4,12 @@
 
 	<header class="col-md-6 col-lg-6">
 		<h1>
-		{% if is_owner %}
-			<span data-challenge-name onclick="MakeEditable(this);">{{ challenge.name }}</span>
-			<input data-input type="text" class="form-control" rel="name" value="{{ challenge.name }}" style="display:none;" />
-		{% else %}
 			{{ challenge.name }}
-		{% endif %}
-			<small>
 			{% if is_owner %}
-				<span data-challenge-duration onclick="MakeEditable(this);">{{ challenge.duration }}</span>
-				<input data-input type="text" class="form-control" rel="duration" value="{{ challenge.duration }}" style="display:none;" />
-				 day{{challenge.duration|pluralize}}
-			{% else %}
-				{{ challenge.duration }} day{{challenge.duration|pluralize}}
+			<a href="{% url 'challenge:maintain' challenge.id %}"><i class="fa fa-pencil"></i></a>
 			{% endif %}
+			<small>
+				{{ challenge.duration }} day{{challenge.duration|pluralize}}
 			</small>
 		</h1>
 		{% if user.is_authenticated %}
