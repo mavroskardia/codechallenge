@@ -1,4 +1,6 @@
-<section class="col-md-6 col-lg-6">
+{% load codertags %}
+
+<section class="entry-comments">
 	{% if can_comment %}
 		<h3>Comment on {{ entry.name }}</h3>
 		<form class="row" action="{% url 'challenge:submit_entry_comment' challenge.id entry.id %}" method="post">
@@ -13,17 +15,14 @@
 	{% if entry.entrycomment_set.count %}
 	<aside>
 		<h4>Comments</h4>
-		<dl class="dl-horizontal">
+		<ul class="list-unstyled">
 		{% for comment in entry.entrycomment_set.all %}
-			<dt>
-				<strong><a href="{% url 'coder:profile' comment.coder_id %}">{{ comment.coder.webname }}</a></strong>
-				<small>{{ comment.date|date:'Y.m.d H:G' }}</small>
-			</dt>
-			<dd>
-				{{ comment.text }}
-			</dd>
+			<li class="row comment-row">
+				{% coder_small comment.coder comment.date %}
+				<p>{{ comment.text }}</p>
+			</li>
 		{% endfor %}
-		</dl>
+		</ul>
 	</aside>
 	{% endif %}
 </section>
