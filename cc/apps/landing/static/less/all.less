@@ -120,7 +120,7 @@ a { font-family: "Roboto", Arial, sans-serif; }
 	&:hover { border-color: @thumbnail-border-hover; }
 }
 
-.coder_small {
+.coder-small {
 	display: inline-block;
 	.text-center;
 
@@ -133,15 +133,22 @@ a { font-family: "Roboto", Arial, sans-serif; }
 }
 
 .comment-row {
-	height: 80px;
+	.row;
+	vertical-align: top;
+	margin-bottom: 0.5em;
+
+	.coder-small {
+		vertical-align: top;
+		margin: 0 0.5em;
+	}
 
 	p {
+		vertical-align: top;
 		position: relative;
 		display: inline-block;
-		line-height: 80px;
-		top: -35px;
 		margin: 0;
-		margin-left: 0.5em;
+		margin-top: 15px;
+		max-width: 90%;
 	}
 }
 
