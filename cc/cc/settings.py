@@ -17,7 +17,7 @@ BASE_DIR = os.path.dirname(os.path.dirname(__file__))
 # See https://docs.djangoproject.com/en/1.6/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = '%vj($t(1f)=m-f$4i@ns=_23d6fnv=b7e&a_8wb#53*6%7#z0x'
+# SECRET_KEY = '%vj($t(1f)=m-f$4i@ns=_23d6fnv=b7e&a_8wb#53*6%7#z0x'
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
@@ -114,6 +114,6 @@ BOWER_INSTALLED_APPS = (
 )
 
 try:
-    from local_settings import *
+    from .local_settings import *
 except:
     pass
