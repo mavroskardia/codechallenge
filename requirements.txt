@@ -3,5 +3,5 @@ Pillow==2.3.0
 South==0.8.4
 django-appconf==0.6
 django-bower==4.8.1
-django-compressor==1.4a1
+django-compressor>=1.4
 six==1.5.2
