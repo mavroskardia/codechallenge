@@ -23,14 +23,8 @@ pip install -r requirements.txt
 sudo pacman -S lessc
 # or: apt-get install node-less
 
-# setup migrations
-cd cc
-./manage.py schemamigration --init landing
-./manage.py schemamigration --init coder
-./manage.py schemamigration --init ccauth
-./manage.py schemamigration --init challenge
-
 # setup database
+cd cc
 ./manage.py syncdb
 
 # migrate tables set up for migration
@@ -45,15 +39,15 @@ Roadmap
 * [ ] ~~Allow people to log in using OAuth2~~
     * Decided not to use OAuth.
 
-* [ ] Creating challenges:
-    * [ ] Specify challenge name, duration, rules
+* [x] Creating challenges:
+    * [x] Specify challenge name, duration, rules
     * [ ] Other things to specify?
-    * [ ] Challenge owners can modify their own challenges
+    * [x] Challenge owners can modify their own challenges
     * [ ] Challenge owners can assign judges (non-participants)
 
-* [ ] Participating in challenges:
+* [x] Participating in challenges:
     * [ ] Reputation-based challenges?
-    * [ ] Time-based challenges (months, days, hours?)
+    * [x] Time-based challenges (months, days, hours?)
     * [ ] Collaborative challenges
 
 * [ ] Reputation-based system (a la Stack Exchange) that gives users graduated capabilities:
