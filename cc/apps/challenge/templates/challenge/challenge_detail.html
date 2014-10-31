@@ -2,7 +2,7 @@
 
 {% block contents %}
 
-	<header class="col-md-6 col-lg-6">
+	<header class="col-xs-12 col-md-12 col-lg-12">
 		<h1>
 			{{ challenge.name }}
 			{% if is_owner %}
@@ -14,11 +14,15 @@
 		</h1>
 		{% if user.is_authenticated %}
 		<div class="row">
-			<ul class="nav nav-pills nav-stacked pull-left">
+			<ul class="nav nav-pills nav-stacked col-lg-3 col-md-3 col-xs-12">
 			{% if participant %}
-				<li><a title="Leave this challenge" href="{% url 'challenge:leave' challenge.id %}"><i class="fa fa-minus-square"></i> Leave challenge</a></li>
+				<li>
+					<a title="Leave this challenge" href="{% url 'challenge:leave' challenge.id %}"><i class="fa fa-minus-square"></i> Leave challenge</a>
+				</li>
 			{% else %}
-				<li><a title="Join this challenge" href="{% url 'challenge:join' challenge.id %}"><i class="fa fa-plus-square"></i> Join challenge</a></li>
+				<li>
+					<a title="Join this challenge" href="{% url 'challenge:join' challenge.id %}"><i class="fa fa-plus-square"></i> Join challenge</a>
+				</li>
 			{% endif %}
 			</ul>
 		</div>
@@ -28,13 +32,15 @@
 
 	</header>
 
+	{% include 'challenge/challenge_comments.html' with challenge=challenge can_comment=can_comment %}
+
 	{% include 'challenge/stats.html' with challenge=challenge participant=participant %}
 
+	{% include 'challenge/participants.html' with challenge=challenge %}	
+	
 	{% include 'challenge/entries.html' with challenge=challenge participant=participant %}
 
-	{% include 'challenge/participants.html' with challenge=challenge %}
 
-	{% include 'challenge/challenge_comments.html' with challenge=challenge can_comment=can_comment %}
 
 {% endblock %}
 

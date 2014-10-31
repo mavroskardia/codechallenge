@@ -1,27 +1,19 @@
 {% extends 'base.html' %}
 
 {% block contents %}
-	<aside class="pull-right">
-		<h4>Recent Challenges</h4>
-		<ul class="nav nav-stacked nav-pills">
-		{% for c in recent_challenges %}
-			<li><a href="{% url 'challenge:detail' c.id %}">{{ c.name }}</a></li>
-		{% endfor %}
-		</ul>
-	</aside>
-
 	<p class="lead">
-		Sign up to be a coder, participate in challenges, earn experience points.
+		Sign up to be a coder. Participate in challenges. Earn experience.
 	</p>
 
-	<div class="row">
+	<div class="clearfix row">
+		<div class="col-xs-12">
 	{% if not user.is_authenticated %}
 		<p>You're not logged in. This is what you can do:</p>
 		<ul class="nav nav-stacked nav-pills pull-left">
 			<li><a href="{% url 'auth:login' %}">Log in as your coder</a></li>
 			<li><a href="{% url 'auth:register' %}">Signup to be a coder</a></li>
 		</ul>
-	{% else %}
+	{% else %}	
 		<p>Welcome back, {{ user.coder.webname }}. Here are your active challenges:</p>
 		<ul class="nav nav-pills nav-stacked pull-left">
 		{% for p in user.coder.participant_set.all %}
@@ -30,11 +22,21 @@
 			<li><a href="{% url 'challenge:create' %}"><i class="fa fa-plus-circle"></i> Create a new challenge</a></li>
 		</ul>
 	{% endif %}
+		</div>
 	</div>
 
 	<aside>
 		<h3>How it works</h3>
 		<p>When you sign up to be a coder, you can participate in any challenge.<br/>Use any language and frameworks you wish as long as it's within the spirit of the Challenge's rules.</p>
+	</aside>
+
+	<aside>
+		<h4>Recent Challenges</h4>
+		<ul class="nav nav-stacked nav-pills">
+		{% for c in recent_challenges %}
+			<li><a href="{% url 'challenge:detail' c.id %}">{{ c.name }}</a></li>
+		{% endfor %}
+		</ul>
 	</aside>
 
 {% endblock %}

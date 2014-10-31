@@ -1,10 +1,10 @@
 {% extends 'coder/base_profile.html' %}
 
 {% block rw %}
-    <aside class="pull-right col-md-3 col-lg-3">
+    <aside class="col-xs-12 col-md-5 col-lg-5 col-md-offset-1 col-lg-offset-1">
         <h3>Update your profile:</h3>
 
-        <form action="{% url 'coder:profile' coder.user.username %}" method="post" class="col-12 col-lg-12 text-left">
+        <form action="{% url 'coder:profile' coder.user.username %}" method="post" class="text-left">
             {% csrf_token %}
             {% for field in form %}
                 <div class="form-group">
