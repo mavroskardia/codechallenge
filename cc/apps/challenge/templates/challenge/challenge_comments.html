@@ -1,6 +1,6 @@
 {% load codertags %}
 
-<section class="challenge-comments col-xs-12 col-md-6 col-lg-6">
+<section class="challenge-comments">
 	{% if can_comment %}
 		<h3>Comment on {{ challenge.name }}</h3>
 		<form class="row" action="{% url 'challenge:submit_comment' challenge.id %}" method="post">
@@ -14,9 +14,16 @@
 
 	{% if challenge.challengecomment_set.count %}
 	<aside class="clearfix">
-		<h4>Comments</h4>
+		<h4>
+			{% if challenge.challengecomment_set.count > 0 %}{{ challenge.challengecomment_set.count }} {% endif %}Comments
+			{% if challenge.challengecomment_set.count > 3 %}
+			<small>
+				<button data-collapsible=".collapsed-comment" class="btn btn-link"><i class="fa fa-caret-down"></i> Show all</button>
+			</small>
+			{% endif %}			
+		</h4>
 		<div class="col-lg-12">
-		<ul class="list-unstyled">
+		<ul class="list-unstyled collapsed collapsed-comment">
 		{% for comment in challenge.challengecomment_set.all %}
 			<li class="comment-row">
 				{% coder_small comment.coder comment.date %}

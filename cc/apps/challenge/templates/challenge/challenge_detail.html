@@ -1,19 +1,19 @@
 {% extends 'base.html' %}
 
 {% block contents %}
-
-	<header class="col-xs-12 col-md-12 col-lg-12">
-		<h1>
-			{{ challenge.name }}
-			{% if is_owner %}
-			<a href="{% url 'challenge:maintain' challenge.id %}"><i class="fa fa-pencil"></i></a>
-			{% endif %}
-			<small>
-				{{ challenge.duration }} day{{challenge.duration|pluralize}}
-			</small>
-		</h1>
-		{% if user.is_authenticated %}
-		<div class="row">
+	<div class="row">
+		<header class="col-xs-12 col-md-12 col-lg-12">
+			<h1>
+				{{ challenge.name }}
+				{% if is_owner %}
+				<a href="{% url 'challenge:maintain' challenge.id %}"><i class="fa fa-pencil"></i></a>
+				{% endif %}
+				<small>
+					{{ challenge.duration }} day{{challenge.duration|pluralize}}
+				</small>
+			</h1>
+			{% if user.is_authenticated %}
+			
 			<ul class="nav nav-pills nav-stacked col-lg-3 col-md-3 col-xs-12">
 			{% if participant %}
 				<li>
@@ -25,22 +25,22 @@
 				</li>
 			{% endif %}
 			</ul>
+		{% endif %}
+
+		</header>
+	</div>
+
+	<div class="row">
+		<div class="col-lg-6">
+			{% include 'challenge/rules.html' with challenge=challenge %}
+			{% include 'challenge/participants.html' with challenge=challenge %}
+			{% include 'challenge/challenge_comments.html' with challenge=challenge can_comment=can_comment %}
 		</div>
-	{% endif %}
-
-		{% include 'challenge/rules.html' with challenge=challenge %}
-
-	</header>
-
-	{% include 'challenge/challenge_comments.html' with challenge=challenge can_comment=can_comment %}
-
-	{% include 'challenge/stats.html' with challenge=challenge participant=participant %}
-
-	{% include 'challenge/participants.html' with challenge=challenge %}	
-	
-	{% include 'challenge/entries.html' with challenge=challenge participant=participant %}
-
-
+		<div class="col-lg-6">
+			{% include 'challenge/stats.html' with challenge=challenge participant=participant %}
+			{% include 'challenge/entries.html' with challenge=challenge participant=participant %}
+		</div>		
+	</div>
 
 {% endblock %}
 
@@ -48,6 +48,12 @@
 
 <script type="text/javascript">
 	$('[title]').tooltip({container: 'body', delay:{show:1000,hide:0}});
+
+	$('[data-collapsible]').click(function () {
+		var classname = $(this).attr('data-collapsible');
+		$(classname).toggleClass('collapsed');
+	});
+
 </script>
 
 {% endblock %}

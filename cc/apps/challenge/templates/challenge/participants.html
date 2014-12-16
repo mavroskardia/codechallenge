@@ -1,16 +1,23 @@
 {% load codertags %}
-	<section class="col-xs-12 col-md-6 col-lg-6">
-		{% if challenge.participant_set.count > 0 %}
-		<h3>{{ challenge.participant_set.count }} Coder{{ challenge.participant_set.count|pluralize }} Participating:</h3>
-		<ul class="nav nav-pills nav-stacked pull-left">
-			{% for participant in challenge.participant_set.all %}
-			<li>
-				{% coder participant.coder %}
-			</li>
-			{% endfor %}
-		</ul>
-		{% else %}
-		<a title="Join this challenge" class="btn btn-lg btn-primary" href="{% url 'challenge:join' challenge.id %}">Join Challenge</a>
-		{% endif %}
-	</section>
 
+<section>
+	{% if challenge.participant_set.count > 0 %}
+	<h3>
+		{{ challenge.participant_set.count }} Coder{{ challenge.participant_set.count|pluralize }} Participating:
+		{% if challenge.participant_set.count > 7 %}
+		<small>
+			<button data-collapsible=".collapsed-coder" class="btn btn-link"><i class="fa fa-caret-right"></i> Show all</button>
+		</small>
+		{% endif %}
+	</h3>
+	<ul class="nav nav-pills collapsed collapsed-coder">
+		{% for participant in challenge.participant_set.all %}
+		<li>
+			{% coder_small participant.coder participant.coder.level %}
+		</li>
+		{% endfor %}
+	</ul>
+	{% else %}
+	<a title="Join this challenge" class="btn btn-lg btn-primary" href="{% url 'challenge:join' challenge.id %}">Join Challenge</a>
+	{% endif %}
+</section>

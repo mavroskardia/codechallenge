@@ -1,5 +1,6 @@
 body {
 	overflow-x: hidden;
+	background: @gray-dark url('../i/bgtexture2.png') repeat; 
 }
 
 #binary_canvas { 
@@ -14,6 +15,57 @@ body {
 h1 { font-weight: 200; }
 h1,h2,h3 { margin: 0; }
 
+strong { font-weight: 600; }
+
+ol {
+	margin-top: 0.5em;
+	list-style-type: none;	
+	counter-reset: ol-counter;
+
+	& > li {
+		position: relative;
+		margin-bottom: 0.5em;
+
+		&:before {
+			position: absolute;
+			display: inline-block;
+			top: 0;
+			left: -1.75em;
+			width: 1.5em;
+			height: 1.35em;
+
+			line-height: 1;
+			text-align: center;
+
+			content: counter(ol-counter);
+			counter-increment: ol-counter;
+
+			border: solid 1px @brand-primary;
+			background-color: darken(@brand-primary, 20%);
+			border-radius: 50%;
+			text-shadow: 1px 1px 1px rgba(0,0,0,0.6);
+		}
+	}
+}
+
+ul {	
+	& > li {
+		display: block;
+		-webkit-animation: fadein .5s;
+		-moz-animation: fadein .5s;
+		animation: fadein .5s;
+	}
+
+	&.collapsed {
+		&.collapsed-coder > li:nth-child(n+8),
+		&.collapsed-comment > li:nth-child(n+4),
+		{
+			opacity: 0;
+			display: none;
+		}
+	}
+}
+
 footer {
 	background-color: darken(@body-bg, 5%);
 	border-top: solid 1px #000;
@@ -22,13 +74,12 @@ footer {
 }
 
 aside {
-	background-color: @gray-dark;
-	border: solid 1px @gray;
-	border-radius: @border-radius-base;
+	background-color: lighten(@gray-dark, 5%);
+	border: solid 1px @gray-dark;
+	//border-radius: @border-radius-base;
 	box-shadow: 3px 3px 10px rgba(0,0,0,0.15);
 	color: @gray-light;
 	padding: 1em;
-	font-size: 80%;
 	margin: 1em 0;
 
 	h3 { margin-bottom: 0.5em; }

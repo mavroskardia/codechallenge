@@ -70,6 +70,10 @@ class Participant(models.Model):
 
 
 class ChallengeComment(models.Model):
+
+	class Meta:
+		ordering = ['-date']
+
 	challenge = models.ForeignKey(Challenge)
 	coder = models.ForeignKey('coder.Coder')
 	date = models.DateTimeField(default=lambda:timezone.now())
