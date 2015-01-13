@@ -1,9 +1,9 @@
 body {
 	overflow-x: hidden;
-	background: @gray-dark url('../i/bgtexture2.png') repeat; 
+	background: @gray-dark url('../i/bgtexture2.png') repeat;
 }
 
-#binary_canvas { 
+#binary_canvas {
 	position: absolute;
 	z-index: -1;
 }
@@ -19,7 +19,7 @@ strong { font-weight: 600; }
 
 ol {
 	margin-top: 0.5em;
-	list-style-type: none;	
+	list-style-type: none;
 	counter-reset: ol-counter;
 
 	& > li {
@@ -48,7 +48,7 @@ ol {
 	}
 }
 
-ul {	
+ul {
 	& > li {
 		display: block;
 		-webkit-animation: fadein .5s;
@@ -90,7 +90,7 @@ aside {
 		position: relative;
 		-webkit-transition: all .25s ease-out;
 		     -o-transition: all .25s ease-out;
-		 	    transition: all .25s ease-out; 	    
+		 	    transition: all .25s ease-out;
 	}
 
 	.row-offcanvas-right { right: 0; }
@@ -156,4 +156,8 @@ hr { border-color: @gray; }
 
 .errorlist {
 	color: @state-danger-text;
+}
+
+.entries .btn-primary {
+	margin: 1em 0;
 }
